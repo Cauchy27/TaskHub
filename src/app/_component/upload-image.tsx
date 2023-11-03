@@ -28,7 +28,7 @@ const UploadImage = (): JSX.Element => {
     }
   }
 
-  const generateFilePoint = (fileSize:Number) => {
+  const generateFilePoint = (fileSize:any) => {
     setFilePoint(Math.round((fileSize/1000 - Math.floor(fileSize/1000))*1008));
   }
 
