@@ -16,8 +16,8 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { Props } from 'next/script';
 
-const pages = ['Products', 'Pricing', 'Blog'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const pages:string[] = ['カスタムメニュー１', 'カスタムメニュー２', 'カスタムメニュー３'];
+const settings:string[] = ['ユーザー情報', '今季の目標', 'ダッシュボード', 'ログアウト'];
 
 type AppBarProps = {
   title: string,

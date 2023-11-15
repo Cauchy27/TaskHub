@@ -10,8 +10,8 @@ import Box from '@mui/material/Box';
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'NEXT APP',
-  description: 'テスト用のアプリです',
+  title: 'TaskHub',
+  description: 'タスク管理をトータル管理',
 }
 
 export default function Layout(props: {
@@ -21,7 +21,7 @@ export default function Layout(props: {
   }
 ) {
   return (
-    <html lang="ja">
+    <html lang="ja" style={{height:"100vh"}}>
       <body style={{backgroundSize:"cover"}}>
         {/* <CssBaseline /> */}
         <Box sx={{ 

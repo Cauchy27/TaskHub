@@ -30,7 +30,7 @@ const Home = () => {
         </Typography>
       </Box> */}
       <AppBar 
-        title="テストアプリ"
+        title="TaskHub"
         bgcolor='#cfe8fc'
         height='10vh'
         width='100vw'

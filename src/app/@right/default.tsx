@@ -12,8 +12,6 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
-import UploadImage from "../_component/upload-image";
-
 export default function Right() {
   return (
     <React.Fragment>
@@ -25,11 +23,6 @@ export default function Right() {
         ml:"1%"
       }} 
     >
-      <Typography variant="h4" gutterBottom align="center">
-        ここに画像をアップロードしてください
-      </Typography>
-      
-      <UploadImage/>
       
     </Box>
   </React.Fragment>
