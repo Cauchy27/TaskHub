@@ -27,6 +27,15 @@ import SendIcon from '@mui/icons-material/Send';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import StarBorder from '@mui/icons-material/StarBorder';
+import { Android } from "@mui/icons-material";
+import { Assessment } from "@mui/icons-material";
+import { AppSettingsAlt } from "@mui/icons-material";
+import { Accessibility } from "@mui/icons-material";
+import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
+import BuildIcon from '@mui/icons-material/Build';
+import ChatIcon from '@mui/icons-material/Chat';
+import AppShortcutIcon from '@mui/icons-material/AppShortcut';
+import AddReactionIcon from '@mui/icons-material/AddReaction';
 import Divider from '@mui/material/Divider';
 
 const style = {
@@ -37,25 +46,62 @@ const style = {
 
 type MenuList = {
   title:string,
-  list:string[]
+  list:SubMenu[],
+  icon:React.ReactNode
+}
+type SubMenu = {
+  subtitle:string,
+  subicon:React.ReactNode
 }
 
 const MenuList:MenuList[] =[
   {
     title:"設定",
-    list:["基本設定"]
+    list:[
+      {
+        subtitle:"基本設定",
+        subicon:<Accessibility/>
+      }
+    ],
+    icon:<BuildIcon  />
   },
   {
     title:"タスク",
-    list:["タスク管理","タスク集計"]
+    list:[
+      {
+        subtitle:"タスク管理",
+        subicon:<AssignmentTurnedInIcon/>
+      },
+      {
+        subtitle:"タスク集計",
+        subicon:<Assessment/>
+      },
+    ],
+    icon:<SendIcon />
   },
   {
     title:"日誌",
-    list:["業務日誌"]
+    list:[
+      {
+        subtitle:"業務日誌",
+        subicon:<ChatIcon/>
+      },
+    ],
+    icon:<SendIcon />
   },
   {
     title:"外部連携",
-    list:["Trello連携","AIマネージャー"]
+    list:[
+      {
+        subtitle:"Trello連携",
+        subicon:<AppShortcutIcon/>
+      },
+      {
+        subtitle:"AIマネージャー",
+        subicon:<AddReactionIcon/>
+      },
+    ],
+    icon:<Android />
   },
 ]
 const LeftSideBar:any = (props:{
@@ -93,7 +139,7 @@ const LeftSideBar:any = (props:{
             <React.Fragment key={null}>
               <ListItemButton onClick={()=>{changeOpen(menu.title)}}>
                 <ListItemIcon>
-                  <InboxIcon />
+                  {menu.icon}
                 </ListItemIcon>
                 <ListItemText primary={menu.title} />
                 {open == menu.title ? <ExpandLess /> : <ExpandMore />}
@@ -105,13 +151,14 @@ const LeftSideBar:any = (props:{
                     <ListItemButton 
                       sx={{ pl: 4 }}
                       onClick={()=>{
-                        callPage(subMenu);
+                        callPage(subMenu.subtitle);
                       }}
+                      selected={subMenu.subtitle == props.showScreen}
                     >
                       <ListItemIcon>
-                        <StarBorder />
+                        {subMenu.subicon}
                       </ListItemIcon>
-                      <ListItemText primary={subMenu} />
+                      <ListItemText primary={subMenu.subtitle} />
                     </ListItemButton>
                   </List>
 
