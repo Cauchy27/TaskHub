@@ -19,7 +19,7 @@ import '@fontsource/roboto/700.css';
 import LeftSideBar from "../_component/leftsidebar";
 
 export default function Right() {
-  const [showScreen, setShowScreen] = useState<string>("");
+  const [showScreen, setShowScreen] = useState<string>("タスク管理");
   return (
     <React.Fragment>
       <Grid container spacing={2} 
@@ -38,6 +38,7 @@ export default function Right() {
           <LeftSideBar
             changeShowScreen = {setShowScreen}
             showScreen = {showScreen}
+            showTitle = {"タスク"}
           />
         </Grid>
         <Grid xs={10}>

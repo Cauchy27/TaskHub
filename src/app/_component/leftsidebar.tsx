@@ -108,8 +108,9 @@ const MenuList:MenuList[] =[
 const LeftSideBar:any = (props:{
   changeShowScreen:any,
   showScreen:string,
+  showTitle:string,
 }) => {
-  const [open, setOpen] = useState<string>(props.showScreen);
+  const [open, setOpen] = useState<string>(props.showTitle);
 
   const changeOpen = (title:string) => {
     if(title == open && open != ""){
@@ -126,7 +127,12 @@ const LeftSideBar:any = (props:{
   return (
     <React.Fragment>
       <List
-        sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+        sx={{ 
+            width: '100%', 
+            maxWidth: 360, 
+            bgcolor: 'background.paper',
+
+           }}
         component="nav"
         aria-labelledby="nested-list-subheader"
         subheader={
@@ -134,7 +140,8 @@ const LeftSideBar:any = (props:{
             メニュー
           </ListSubheader>
         }
-      >
+        >
+        <Divider/>
         {
           MenuList.map((menu:MenuList)=>(
             <React.Fragment key={null}>
@@ -145,24 +152,27 @@ const LeftSideBar:any = (props:{
                 <ListItemText primary={menu.title} />
                 {open == menu.title ? <ExpandLess /> : <ExpandMore />}
               </ListItemButton>
+              <Divider/>
               <Collapse in={open == menu.title} timeout="auto" unmountOnExit>
                 {
                   menu.list.map((subMenu)=>(
-                  <List component="div" disablePadding key={null}>
-                    <ListItemButton 
-                      sx={{ pl: 4 }}
-                      onClick={()=>{
-                        callPage(subMenu.subtitle);
-                      }}
-                      selected={subMenu.subtitle == props.showScreen}
-                    >
-                      <ListItemIcon>
-                        {subMenu.subicon}
-                      </ListItemIcon>
-                      <ListItemText primary={subMenu.subtitle} />
-                    </ListItemButton>
-                  </List>
-
+                    <>
+                      <List component="div" disablePadding key={null}>
+                        <ListItemButton 
+                          sx={{ pl: 4 }}
+                          onClick={()=>{
+                            callPage(subMenu.subtitle);
+                          }}
+                          selected={subMenu.subtitle == props.showScreen}
+                        >
+                          <ListItemIcon>
+                            {subMenu.subicon}
+                          </ListItemIcon>
+                          <ListItemText primary={subMenu.subtitle} />
+                        </ListItemButton>
+                      </List>
+                      <Divider/>
+                    </>
                   ))
                 }
               </Collapse>
