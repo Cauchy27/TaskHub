@@ -36,6 +36,7 @@ import BuildIcon from '@mui/icons-material/Build';
 import ChatIcon from '@mui/icons-material/Chat';
 import AppShortcutIcon from '@mui/icons-material/AppShortcut';
 import AddReactionIcon from '@mui/icons-material/AddReaction';
+import ChromeReaderModeIcon from '@mui/icons-material/ChromeReaderMode';
 import Divider from '@mui/material/Divider';
 
 const style = {
@@ -87,7 +88,7 @@ const MenuList:MenuList[] =[
         subicon:<ChatIcon/>
       },
     ],
-    icon:<SendIcon />
+    icon:<ChromeReaderModeIcon />
   },
   {
     title:"外部連携",
