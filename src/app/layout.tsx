@@ -16,8 +16,7 @@ export const metadata: Metadata = {
 
 export default function Layout(props: {
     children: React.ReactNode
-    left:React.ReactNode
-    right:React.ReactNode
+    main:React.ReactNode
   }
 ) {
   return (
@@ -25,30 +24,26 @@ export default function Layout(props: {
       <body style={{backgroundSize:"cover"}}>
         {/* <CssBaseline /> */}
         <Box sx={{ 
-            height: '10vh',
+            height:'68.5px',
             width:'100%',
             left:"0%",
             top:"0%",
+            p:"0%",
           }} 
         >
           {props.children}
         </Box>
         <Box sx={{ 
-            height: '90vh',
+            height: '90%',
             width:'100%',
             left:"0%",
-            mt:"1%",
+            p:"0%",
+            top:"68.5px",
+            position:"absolute"
             // bgcolor: '#f0e68c', 
           }} 
         >
-          <Grid container spacing={2} sx={{minHeight:"98%",maxHeight:"98%",ml:"1%",mr:"1%", maxWidth:"98%"}}>
-            <Grid xs={2}>
-              {props.left}
-            </Grid>
-            <Grid xs={10}>
-              {props.right}
-            </Grid>
-          </Grid>
+          {props.main}
         </Box>
       </body>
     </html>
