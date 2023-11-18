@@ -57,6 +57,16 @@ type SubMenu = {
 
 const MenuList:MenuList[] =[
   {
+    title:"ダッシュボード",
+    list:[
+      {
+        subtitle:"ダッシュボード",
+        subicon:<StarBorder/>
+      }
+    ],
+    icon:<StarBorder  />
+  },
+  {
     title:"設定",
     list:[
       {

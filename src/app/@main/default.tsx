@@ -2,8 +2,7 @@
 import Image from "next/image";
 
 import * as React from 'react';
-import { useState } from "react";
-import Router from 'next/router'
+import { useState,useEffect } from "react";
 
 import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
@@ -17,9 +16,27 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
 import LeftSideBar from "../_component/leftsidebar";
+import GoogleAuth from "../_component/googleAuth";
 
-export default function Right() {
-  const [showScreen, setShowScreen] = useState<string>("タスク管理");
+const reAccessToken = new RegExp(/access_token=(.*?)(&|$)/, "i");
+const reRefreshToken = new RegExp(/refresh_token=(.*?)(&|$)/, "i");
+
+export default function Right(props:any) {
+  const [showScreen, setShowScreen] = useState<string>("ダッシュボード");
+  const [accessToken,setAccessToken] = useState<string|null>("");
+  const [refreshToken,setRefreshToken] = useState<string|null>("");
+  const [startTitle, setStartTitle] = useState<string>("ダッシュボード");
+
+  useEffect(()=>{
+    let UrlAccessTokenArray:RegExpMatchArray|null  = location.href.match(reAccessToken);
+    let UrlRefreshTokenArray:RegExpMatchArray|null  = location.href.match(reRefreshToken);
+    if(UrlAccessTokenArray && UrlRefreshTokenArray){
+      setAccessToken(UrlAccessTokenArray[1]);
+      setRefreshToken(UrlRefreshTokenArray[1]);
+      // setStartTitle("ダッシュボード");
+    }
+  },[accessToken,refreshToken]);
+
   return (
     <React.Fragment>
       <Grid container spacing={2} 
@@ -38,21 +55,32 @@ export default function Right() {
           <LeftSideBar
             changeShowScreen = {setShowScreen}
             showScreen = {showScreen}
-            showTitle = {"タスク"}
+            showTitle = {startTitle}
           />
         </Grid>
-        <Grid xs={10}>
-          <CssBaseline />
-          <Box sx={{ 
-              bgcolor: '#f0e68c', 
-              height: '100%',
-              width:'100%',
-              m:"1%"
-            }} 
-          >
-            {showScreen}
-          </Box>
-        </Grid>
+        {
+          accessToken == "" &&
+          <>
+            <GoogleAuth/>
+          </>
+        }
+        {
+          accessToken != "" &&
+          <>
+            <Grid xs={10}>
+              <CssBaseline />
+              <Box sx={{ 
+                  bgcolor: '#f0e68c', 
+                  height: '100%',
+                  width:'100%',
+                  m:"1%"
+                }} 
+              >
+                {showScreen}
+              </Box>
+            </Grid>
+          </>
+        }
       </Grid>
   </React.Fragment>
   );
