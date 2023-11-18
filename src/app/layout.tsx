@@ -20,11 +20,11 @@ export default function Layout(props: {
   }
 ) {
   return (
-    <html lang="ja" style={{height:"100vh"}}>
+    <html lang="ja" style={{height:"100%"}}>
       <body style={{backgroundSize:"cover"}}>
         {/* <CssBaseline /> */}
         <Box sx={{ 
-            height:'68.5px',
+            height:"10%",
             width:'100%',
             left:"0%",
             top:"0%",
@@ -34,7 +34,7 @@ export default function Layout(props: {
           {props.children}
         </Box>
         <Box sx={{ 
-            height: '90%',
+            height: "90%",
             width:'100%',
             left:"0%",
             p:"0%",

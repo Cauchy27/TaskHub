@@ -135,7 +135,7 @@ const LeftSideBar:any = (props:{
     props.changeShowScreen(pageId);
   }
   return (
-    <React.Fragment>
+    <div style={{height:"100%",overflow:"scroll"}}>
       <List
         sx={{ 
             width: '100%', 
@@ -153,8 +153,8 @@ const LeftSideBar:any = (props:{
         >
         <Divider/>
         {
-          MenuList.map((menu:MenuList)=>(
-            <React.Fragment key={null}>
+          MenuList.map((menu:MenuList,key:any)=>(
+            <React.Fragment key={key}>
               <ListItemButton onClick={()=>{changeOpen(menu.title)}}>
                 <ListItemIcon>
                   {menu.icon}
@@ -190,7 +190,7 @@ const LeftSideBar:any = (props:{
           ))
         }
       </List>
-    </React.Fragment>
+    </div>
   );
 }
 
