@@ -27,7 +27,7 @@ import SendIcon from '@mui/icons-material/Send';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import StarBorder from '@mui/icons-material/StarBorder';
-import { Android } from "@mui/icons-material";
+import { Android, Login } from "@mui/icons-material";
 import { Assessment } from "@mui/icons-material";
 import { AppSettingsAlt } from "@mui/icons-material";
 import { Accessibility } from "@mui/icons-material";
@@ -48,11 +48,13 @@ const style = {
 type MenuList = {
   title:string,
   list:SubMenu[],
-  icon:React.ReactNode
+  icon:React.ReactNode,
+  disabled:boolean
 }
 type SubMenu = {
   subtitle:string,
-  subicon:React.ReactNode
+  subicon:React.ReactNode,
+  disabled:boolean
 }
 
 const MenuList:MenuList[] =[
@@ -61,58 +63,70 @@ const MenuList:MenuList[] =[
     list:[
       {
         subtitle:"ダッシュボード",
-        subicon:<StarBorder/>
+        subicon:<StarBorder/>,
+        disabled:true,
       }
     ],
-    icon:<StarBorder  />
-  },
-  {
-    title:"設定",
-    list:[
-      {
-        subtitle:"基本設定",
-        subicon:<Accessibility/>
-      }
-    ],
-    icon:<BuildIcon  />
+    icon:<StarBorder  />,
+    disabled:true,
   },
   {
     title:"タスク",
     list:[
       {
         subtitle:"タスク管理",
-        subicon:<AssignmentTurnedInIcon/>
+        subicon:<AssignmentTurnedInIcon/>,
+        disabled:false,
       },
       {
         subtitle:"タスク集計",
-        subicon:<Assessment/>
+        subicon:<Assessment/>,
+        disabled:true,
       },
     ],
-    icon:<SendIcon />
+    icon:<SendIcon />,
+    disabled:false,
   },
   {
     title:"日誌",
     list:[
       {
         subtitle:"業務日誌",
-        subicon:<ChatIcon/>
+        subicon:<ChatIcon/>,
+        disabled:true,
       },
     ],
-    icon:<ChromeReaderModeIcon />
+    icon:<ChromeReaderModeIcon />,
+    disabled:true,
   },
   {
     title:"外部連携",
     list:[
       {
         subtitle:"Trello連携",
-        subicon:<AppShortcutIcon/>
+        subicon:<AppShortcutIcon/>,
+        disabled:true,
       },
       {
         subtitle:"AIマネージャー",
-        subicon:<AddReactionIcon/>
+        subicon:<AddReactionIcon/>,
+        disabled:true,
       },
     ],
-    icon:<Android />
+    icon:<Android />,
+    disabled:true,
+  },
+  {
+    title:"設定",
+    list:[
+      {
+        subtitle:"基本設定",
+        subicon:<Accessibility/>,
+        disabled:true,
+      }
+    ],
+    icon:<BuildIcon  />,
+    disabled:true,
   },
 ]
 const LeftSideBar:any = (props:{
@@ -155,7 +169,7 @@ const LeftSideBar:any = (props:{
         {
           MenuList.map((menu:MenuList,key:any)=>(
             <React.Fragment key={key}>
-              <ListItemButton onClick={()=>{changeOpen(menu.title)}}>
+              <ListItemButton disabled={menu.disabled} onClick={()=>{changeOpen(menu.title)}}>
                 <ListItemIcon>
                   {menu.icon}
                 </ListItemIcon>
@@ -174,6 +188,7 @@ const LeftSideBar:any = (props:{
                             callPage(subMenu.subtitle);
                           }}
                           selected={subMenu.subtitle == props.showScreen}
+                          disabled={subMenu.disabled}
                         >
                           <ListItemIcon>
                             {subMenu.subicon}

@@ -3,6 +3,7 @@ import Image from "next/image";
 
 import * as React from 'react';
 import { useState,useEffect } from "react";
+// import { useRouter } from 'next/router';
 
 import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
@@ -18,141 +19,124 @@ import '@fontsource/roboto/700.css';
 import LeftSideBar from "../_component/leftsidebar";
 import GoogleAuth from "../_component/googleAuth";
 import ContentTitle from "../_component/contentTitle";
+import { Supabase } from "../_component/config/supabase";
 
-import { TaskCardProps } from "../_component/config/propsType";
-
-const reAccessToken = new RegExp(/access_token=(.*?)(&|$)/, "i");
-const reRefreshToken = new RegExp(/refresh_token=(.*?)(&|$)/, "i");
+import { TaskCardProps, TaskTagProps } from "../_component/config/propsType";
 
 export default function Right(props:any) {
-  const [showScreen, setShowScreen] = useState<string>("ダッシュボード");
-  const [accessToken,setAccessToken] = useState<string|null>("");
-  const [refreshToken,setRefreshToken] = useState<string|null>("");
-  const [startTitle, setStartTitle] = useState<string>("ダッシュボード");
+  const [showScreen, setShowScreen] = useState<string>("タスク管理");
+  const [startTitle, setStartTitle] = useState<string>("タスク");
+  const [Account, setAccount] = useState<string>('');
+  const [userData,setUserData] = useState<any>([]);
+  const [userPicture, setUserPicture] = useState<string>("");
 
-  const taskTest:TaskCardProps[]=[
-    {
-      task_id:1,
-      task_name:"タスクテスト１",
-      task_detail:"これはタスクの表示テスト1です",
-      task_point:25,
-      task_from:"2023/11/15",
-      task_to:"2023/11/18",
-      task_priority:3,
-      task_tag_name:"開発"
-    },
-    {
-      task_id:1,
-      task_name:"タスクテスト２",
-      task_detail:"これはタスクの表示テスト２です",
-      task_point:25,
-      task_from:"2023/11/15",
-      task_to:"2023/11/18",
-      task_priority:1,
-      task_tag_name:"開発"
-    },
-    {
-      task_id:1,
-      task_name:"タスクテスト３",
-      task_detail:"これはタスクの表示テスト３です",
-      task_point:25,
-      task_from:"2023/11/15",
-      task_to:"2023/11/18",
-      task_priority:10,
-      task_tag_name:"開発"
-    },
-    {
-      task_id:1,
-      task_name:"タスクテスト４",
-      task_detail:"これはタスクの表示テスト４です",
-      task_point:25,
-      task_from:"2023/11/15",
-      task_to:"2023/11/18",
-      task_priority:7,
-      task_tag_name:"開発"
-    },
-    {
-      task_id:1,
-      task_name:"タスクテスト５",
-      task_detail:"これはタスクの表示テスト５です",
-      task_point:25,
-      task_from:"2023/11/15",
-      task_to:"2023/11/18",
-      task_priority:3,
-      task_tag_name:"その他"
-    },
-    {
-      task_id:1,
-      task_name:"タスクテスト６",
-      task_detail:"これはタスクの表示テスト６です",
-      task_point:25,
-      task_from:"2023/11/15",
-      task_to:"2023/11/18",
-      task_priority:11,
-      task_tag_name:"開発"
-    },
-    {
-      task_id:1,
-      task_name:"タスクテスト７",
-      task_detail:"これはタスクの表示テスト７です",
-      task_point:25,
-      task_from:"2023/11/15",
-      task_to:"2023/11/18",
-      task_priority:4,
-      task_tag_name:"採用"
-    },
-    {
-      task_id:1,
-      task_name:"タスクテスト８",
-      task_detail:"これはタスクの表示テスト８です",
-      task_point:25,
-      task_from:"2023/11/15",
-      task_to:"2023/11/18",
-      task_priority:2,
-      task_tag_name:"開発"
-    },
-    {
-      task_id:1,
-      task_name:"タスクテスト９",
-      task_detail:"これはタスクの表示テスト９です",
-      task_point:25,
-      task_from:"2023/11/15",
-      task_to:"2023/11/18",
-      task_priority:3,
-      task_tag_name:"開発"
-    },
-    {
-      task_id:1,
-      task_name:"タスクテスト１０",
-      task_detail:"これはタスクの表示テスト１０です",
-      task_point:25,
-      task_from:"2023/11/15",
-      task_to:"2023/11/18",
-      task_priority:3,
-      task_tag_name:"開発"
-    },
-    {
-      task_id:1,
-      task_name:"タスクテスト１１",
-      task_detail:"これはタスクの表示テスト１１です",
-      task_point:25,
-      task_from:"2023/11/15",
-      task_to:"2023/11/18",
-      task_priority:3,
-      task_tag_name:"開発"
+  const [taskData, setTaskData] = useState<TaskCardProps[]|any>([]);
+  const [taskTags, setTaskTags] = useState<TaskTagProps[]|any>([]);
+
+  const getCurrentUser = async () => {
+    // ログインのセッションを取得する処理
+    const { data } = await Supabase.auth.getSession()
+    // セッションがあるときだけ現在ログインしているユーザーを取得する
+    if (data.session !== null) {
+      // supabaseに用意されている現在ログインしているユーザーを取得する関数
+      const { data: { user } } = await Supabase.auth.getUser()
+      // currentUserにユーザーのメールアドレスを格納
+      if(user){
+        setUserData(user);
+        setAccount(user.email??"")
+        console.log(user.email??"");
+        if(data.session?.user.identities && data.session?.user.identities[0].identity_data){
+          // console.log(data.session?.user.identities[0].identity_data.picture);
+          setUserPicture(data.session?.user.identities[0].identity_data.picture)
+        }
+      }
     }
-  ]
-
-
+    return;
+  }
+  const getTasks = async()=>{
+    let { data, error, status } = await Supabase
+      .from('task')
+      .select(`task_id, task_name, task_detail, task_point, task_from, task_due, task_end, task_priority, task_tag_id, task_user_id,  task_user_id`)
+      .eq('task_user_id', userData.id);
+    console.log(data);
+    console.log(error);
+    if(data){
+      setTaskData(data);
+    }
+  }
+  const getTaskTags = async()=>{
+    let { data, error, status } = await Supabase
+      .from('task_tag')
+      .select(`task_tag_id, task_tag_name , create_user_id`)
+      .eq('create_user_id', userData.id);
+    console.log(data);
+    console.log(error);
+    if(data){
+      setTaskTags(data);
+    }
+  }
+  const today:Date = new Date();
+  const nextDay:Date = new Date(today.getDate() + 1);
+  const insertTask = async() => {
+    const { error } = await Supabase
+      .from('task')
+      .insert({ 
+        task_name: "新規タスク",
+        task_detail: 'ここにタスクの内容を入力',
+        task_point:0,
+        task_from:today,
+        task_due:nextDay,
+        task_end:null,
+        task_priority:0,
+        task_tag_id:null,
+        task_user_id:userData.id
+      });
+  }
+  const updateTask = async(input:TaskCardProps) => {
+    const { error } = await Supabase
+      .from('task')
+      .update({ 
+        task_id:input.task_id,
+        task_name:input.task_name,
+        task_detail: input.task_detail,
+        task_point:input.task_point,
+        task_from:input.task_from,
+        task_due:input.task_due,
+        task_end:input.task_end,
+        task_priority:input.task_priority,
+        task_tag_id:input.task_tag_id,
+        task_user_id:input.task_user_id
+      })
+      .eq('task_id', input.task_id);
+    console.log(error);
+  }
+  const deleteTask = async(task_id:string) => {
+    const { error } = await Supabase
+      .from('task')
+      .delete()
+      .eq('task_id', task_id);
+    console.log(error);
+  }
   useEffect(()=>{
-    let UrlAccessTokenArray:RegExpMatchArray|null  = location.href.match(reAccessToken);
-    let UrlRefreshTokenArray:RegExpMatchArray|null  = location.href.match(reRefreshToken);
-    if(UrlAccessTokenArray && UrlRefreshTokenArray){
-      setAccessToken(UrlAccessTokenArray[1]);
-      setRefreshToken(UrlRefreshTokenArray[1]);
-      // setStartTitle("ダッシュボード");
+    getCurrentUser();
+    getTasks();
+    getTaskTags();
+  },[userData]);
+
+  // const router = useRouter();
+  const Logout = async() => {
+    try{
+      const { error:logoutError } = await Supabase.auth.signOut()
+      if (logoutError) {
+        throw logoutError;
+      }
+      // await router.push("/");
+      setAccount("");
+
+    }catch{
+      alert('エラーが発生しました');
     }
-  },[accessToken,refreshToken]);
+  }
 
   return (
     <React.Fragment>
@@ -172,21 +156,21 @@ export default function Right(props:any) {
             changeShowScreen = {setShowScreen}
             showScreen = {showScreen}
             showTitle = {startTitle}
+            // Login={<GoogleAuth
+            //   Visibility={Account==""?"visible":"hidden"}
+            // />}
           />
         </Grid>
+        <GoogleAuth
+          Visibility={Account==""?"visible":"hidden"}
+        />
         {
-          accessToken == "" &&
+          Account != "" &&
           <>
-            <GoogleAuth/>
-          </>
-        }
-        {
-          accessToken != "" &&
-          <>
-            <Grid xs={10} sx={{maxHeight:"100%"}}>
+            <Grid xs={10} sx={{maxHeight:"98%"}}>
               <CssBaseline />
               <Box sx={{ 
-                  bgcolor: '#f0e68c', 
+                  // bgcolor: '#f0e68c', 
                   height: '100%',
                   width:'100%',
                   m:"1%"
@@ -194,8 +178,18 @@ export default function Right(props:any) {
               >
                 <ContentTitle
                   contentTitleName={showScreen}
-                  accessToken={accessToken}
-                  topics={taskTest}
+                  Account={Account}
+                  topics={taskData}
+                  subtopic={taskTags}
+                  checkLogin={getCurrentUser}
+                  logout={Logout}
+                  image_url={userPicture}
+                  createCard={insertTask}
+                  reloadCard={getTasks}
+                  updateCard={updateTask}
+                  deleteCard={deleteTask}
+                  createCardName={"タスク新規作成"}
+                  reloadCardName={"リスト更新"}
                 />
               </Box>
             </Grid>

@@ -1,6 +1,6 @@
 "use client"
-
 import * as React from 'react';
+import { useState, useEffect} from "react";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -16,8 +16,13 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { Props } from 'next/script';
 
-const pages:string[] = ['カスタムメニュー１', 'カスタムメニュー２', 'カスタムメニュー３'];
-const settings:string[] = ['ユーザー情報', '今季の目標', 'ダッシュボード', 'ログアウト'];
+import { Supabase } from './config/supabase';
+
+const pages:string[] = ['カスタムメニュー１[準備中]'];
+const settings:string[] = ['ユーザー情報[準備中]', '今季の目標[準備中]'];
+
+const reAccessToken = new RegExp(/access_token=(.*?)(&|$)/, "i");
+const reRefreshToken = new RegExp(/refresh_token=(.*?)(&|$)/, "i");
 
 type AppBarProps = {
   title: string,
@@ -26,8 +31,48 @@ type AppBarProps = {
   width: string,
 }
 const ResponsiveAppBar =(AppBarProps:AppBarProps) => {
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+  const [accessToken,setAccessToken] = useState<string|null>("");
+  const [refreshToken,setRefreshToken] = useState<string|null>("");
+
+  // const [userPicture, setUserPicture] = useState<string>("");
+
+  // const getCurrentUser = async () => {
+  //   // ログインのセッションを取得する処理
+  //   const { data } = await Supabase.auth.getSession()
+  //   // セッションがあるときだけ現在ログインしているユーザーを取得する
+  //   if (data.session !== null) {
+  //     // supabaseに用意されている現在ログインしているユーザーを取得する関数
+  //     const { data: { user } } = await Supabase.auth.getUser()
+  //     // currentUserにユーザーのメールアドレスを格納
+  //     if(user){
+  //       if(data.session?.user.identities && data.session?.user.identities[0].identity_data){
+  //         // console.log(data.session?.user.identities[0].identity_data.picture);
+  //         setUserPicture(data.session?.user.identities[0].identity_data.picture)
+  //       }
+  //     }
+  //   }
+  //   console.log(data)
+  // }
+  // useEffect(()=>{
+  //   getCurrentUser();
+  // },[userPicture]);
+
+  useEffect(()=>{
+    let UrlAccessTokenArray:RegExpMatchArray|null  = location.href.match(reAccessToken);
+    let UrlRefreshTokenArray:RegExpMatchArray|null  = location.href.match(reRefreshToken);
+    if(UrlAccessTokenArray && UrlRefreshTokenArray){
+      setAccessToken(UrlAccessTokenArray[1]);
+      setRefreshToken(UrlRefreshTokenArray[1]);
+
+      console.log(location.href.split("#access_token="));
+      const newUrl = location.href.split("#access_token=");
+      history.pushState({}, newUrl[1], '');
+    }
+  },[]);
+
+  // const [Account, setAccount] = useState<string>('');
+  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -71,44 +116,6 @@ const ResponsiveAppBar =(AppBarProps:AppBarProps) => {
           >
             {AppBarProps.title}
           </Typography>
-
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: 'block', md: 'none' },
-              }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
           <Typography
             variant="h5"
             noWrap
@@ -127,50 +134,10 @@ const ResponsiveAppBar =(AppBarProps:AppBarProps) => {
           >
             LOGO
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page}
-              </Button>
-            ))}
-          </Box>
-
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
         </Toolbar>
       </Container>
     </AppBar>
   );
 }
+
 export default ResponsiveAppBar;
