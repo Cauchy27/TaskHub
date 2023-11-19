@@ -149,7 +149,7 @@ const ContentTitle = (props:{
                   <Button variant="outlined" onClick={()=>{props.getAllTasks()}}>{props.reloadCardName3}</Button>
                   <Button variant="outlined" onClick={()=>{switchDelete()}}>{deleteCheck?"削除ロック解除":"削除ロック"}</Button>
                 </Grid>
-                <Grid xs={4} sx={{height:"100%"}}>
+                <Grid xs={3.5} sx={{height:"100%"}}>
                   <Grid container spacing={2} 
                     sx={{
                       height:"100%",
