@@ -140,7 +140,7 @@ const ContentTitle = (props:{
                   m:"1%"
                 }}
               >
-                <Grid xs={8} sx={{maxHeight:"100%"}}>
+                <Grid xs={9} sx={{maxHeight:"100%"}}>
                   <Typography align="justify" variant="h5" >{props.contentTitleName}</Typography>
                   <Button sx={{ m: 1, width: '15ch' }} variant="outlined" onClick={()=>{props.createCard().then(()=>{props.reloadCard1()})}}>{props.createCardName}</Button>
                   <Button sx={{ m: 1, width: '15ch' }} variant="outlined" onClick={()=>{props.reloadCard1()}}>{props.reloadCardName1}</Button>
