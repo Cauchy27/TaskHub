@@ -16,6 +16,7 @@ import CircularProgressWithLabel from './circleProggressWithLabel';
 
 import CreateIcon from '@mui/icons-material/Create';
 import AddTaskIcon from '@mui/icons-material/AddTask';
+import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 
 const bull = (
   <Box
@@ -124,7 +125,7 @@ const TaskCard = (props:topicProps) => {
               </Grid>
               <Grid xs={2.5} sx={{m:"2%"}}>
                 <CardActions>
-                  <Button variant="outlined" disabled={props.deleteNG} size="small" endIcon={<AddTaskIcon />} onClick={()=>{
+                  <Button variant="outlined" disabled={props.deleteNG} size="small" endIcon={<DeleteSweepIcon />} onClick={()=>{
                     props.deleteTask(props.topic.task_id).then(()=>{
                       props.reloadTasks();
                     });
