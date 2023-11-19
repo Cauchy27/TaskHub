@@ -93,6 +93,27 @@ const TaskCard = (props:topicProps) => {
     }
   }
 
+  const taskComplete = async() => {
+    setTaskPoint(100);
+    setTaskEnd(today);
+    const from:Date = new Date(taskFrom);
+    const due:Date = new Date(taskDue);
+    const updateTaskData:TaskCardProps = {
+        task_id:taskId,
+        task_name:taskName,
+        task_detail:taskDetail,
+        task_point:100,
+        task_from:from,
+        task_due:due,
+        task_priority:taskPriority,
+        task_tag_id:taskTagId,
+        task_end:today,
+        task_user_id:taskUserId,
+    }
+    console.log(updateTaskData);
+    console.log(props.updateCard(updateTaskData));
+  }
+
   return(
     <React.Fragment>
       <CardContent>
@@ -158,7 +179,7 @@ const TaskCard = (props:topicProps) => {
                   <Button variant="outlined" size="small" onClick={()=>{changeEdit()}} endIcon={<CreateIcon />}>{cardEdit?"保存":"編集"}</Button>
                 </CardActions>
                 <CardActions>
-                  <Button variant="outlined" size="small" endIcon={<AddTaskIcon />}>完了</Button>
+                  <Button variant="outlined" size="small" endIcon={<AddTaskIcon />} onClick={()=>{taskComplete()}}>完了</Button>
                 </CardActions>
               </Grid>
             </Grid>
