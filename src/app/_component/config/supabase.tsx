@@ -1,5 +1,4 @@
 import { createClient } from '@supabase/supabase-js';
-import { getServerSideProps } from './importEnv';
 
 // supabaseの初期化を行う
 export const Supabase = createClient(
