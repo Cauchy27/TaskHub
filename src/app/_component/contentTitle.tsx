@@ -140,11 +140,11 @@ const ContentTitle = (props:{
               >
                 <Grid xs={8} sx={{maxHeight:"100%"}}>
                   <Typography align="justify" variant="h5" >{props.contentTitleName}</Typography>
-                  <Button onClick={()=>{props.createCard().then(()=>{props.createCard()})}}>{props.createCardName}</Button>
+                  <Button variant="outlined" onClick={()=>{props.createCard().then(()=>{props.createCard()})}}>{props.createCardName}</Button>
                   <Button onClick={()=>{props.reloadCard1()}}>{props.reloadCardName1}</Button>
-                  <Button onClick={()=>{props.reloadCard2()}}>{props.reloadCardName4}</Button>
-                  <Button onClick={()=>{props.getEndTasks()}}>{props.reloadCardName2}</Button>
-                  <Button onClick={()=>{props.getAllTasks()}}>{props.reloadCardName3}</Button>
+                  <Button variant="outlined" onClick={()=>{props.reloadCard2()}}>{props.reloadCardName4}</Button>
+                  <Button variant="outlined" onClick={()=>{props.getEndTasks()}}>{props.reloadCardName2}</Button>
+                  <Button variant="outlined" onClick={()=>{props.getAllTasks()}}>{props.reloadCardName3}</Button>
                   <Button onClick={()=>{switchDelete()}}>{deleteCheck?"削除ロック解除":"削除ロック"}</Button>
                 </Grid>
                 <Grid xs={4} sx={{height:"100%"}}>
