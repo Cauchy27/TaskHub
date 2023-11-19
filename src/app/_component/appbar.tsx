@@ -132,7 +132,7 @@ const ResponsiveAppBar =(AppBarProps:AppBarProps) => {
               textDecoration: 'none',
             }}
           >
-            LOGO
+            TaskHub
           </Typography>
         </Toolbar>
       </Container>
