@@ -129,8 +129,8 @@ export default function Right(props:any) {
     const { error } = await Supabase
       .from('task')
       .insert({ 
-        task_name: "新規タスク",
-        task_detail: 'ここにタスクの内容を入力',
+        task_name: "",
+        task_detail: '',
         task_point:0,
         task_from:today,
         task_due:today,
