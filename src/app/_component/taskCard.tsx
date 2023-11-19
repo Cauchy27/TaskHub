@@ -201,7 +201,7 @@ const TaskCard = (props:topicProps) => {
                     setTaskName(event.target.value)
                   }
                 }
-                sx={{  width: '20ch' }}
+                sx={{ m: 1, width: '25ch' }}
             />
             <TextField
               type="number"
@@ -223,7 +223,7 @@ const TaskCard = (props:topicProps) => {
               label="優先度"
               size="small"
               defaultValue={taskPriority}
-              sx={{ m: 1, width: '10ch' }}
+              sx={{ m: 1, width: '25ch' }}
               onChange={(event)=>{setTaskPriority(Number(event.target.value))}}
             >
               {priorities.map((value) => (
@@ -280,7 +280,7 @@ const TaskCard = (props:topicProps) => {
               label="タグ"
               size="small"
               defaultValue={taskTagId}
-              sx={{ m: 1, width: '15ch' }}
+              sx={{ m: 1, width: '25ch' }}
             >
               {taskTags.map((value,key) => (
                 <MenuItem key={key} value={value.task_tag_id}>
@@ -302,9 +302,9 @@ const TaskCard = (props:topicProps) => {
                   setTaskEnd(event.target.value);
                 }
               }
-              sx={{ m: 1, width: '15ch' }}
+              sx={{ m: 1, width: '25ch' }}
             />
-            <Button variant="outlined" sx={{ m: 1, width: '20ch' }} size="small" onClick={()=>{changeEdit()}} endIcon={<CreateIcon />}>{cardEdit?"保存":"編集"}</Button>
+            <Button variant="outlined" sx={{ m: 1, width: '25ch' }} size="small" onClick={()=>{changeEdit()}} endIcon={<CreateIcon />}>{cardEdit?"保存":"編集"}</Button>
           </>
         }
       </CardContent>
