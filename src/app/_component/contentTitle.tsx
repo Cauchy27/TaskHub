@@ -10,6 +10,50 @@ import { TaskCardProps, TaskTagProps } from './config/propsType';
 import TaskCard from './taskCard';
 import { Button } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
+import Switch, { SwitchProps } from '@mui/material/Switch';
+import Stack from '@mui/material/Stack';
+
+const AntSwitch = styled(Switch)(({ theme }) => ({
+  width: 28,
+  height: 16,
+  padding: 0,
+  display: 'flex',
+  '&:active': {
+    '& .MuiSwitch-thumb': {
+      width: 15,
+    },
+    '& .MuiSwitch-switchBase.Mui-checked': {
+      transform: 'translateX(9px)',
+    },
+  },
+  '& .MuiSwitch-switchBase': {
+    padding: 2,
+    '&.Mui-checked': {
+      transform: 'translateX(12px)',
+      color: '#fff',
+      '& + .MuiSwitch-track': {
+        opacity: 1,
+        backgroundColor: theme.palette.mode === 'dark' ? '#177ddc' : '#1890ff',
+      },
+    },
+  },
+  '& .MuiSwitch-thumb': {
+    boxShadow: '0 2px 4px 0 rgb(0 35 11 / 20%)',
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    transition: theme.transitions.create(['width'], {
+      duration: 200,
+    }),
+  },
+  '& .MuiSwitch-track': {
+    borderRadius: 16 / 2,
+    opacity: 1,
+    backgroundColor:
+      theme.palette.mode === 'dark' ? 'rgba(255,255,255,.35)' : 'rgba(0,0,0,.25)',
+    boxSizing: 'border-box',
+  },
+}));
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -42,17 +86,29 @@ const ContentTitle = (props:{
   logout:any,
   image_url:string,
   createCard:any,
-  reloadCard:any,
+  reloadCard1:any,
+  reloadCard2:any,
+  getAllTasks:any,
+  getEndTasks:any,
   updateCard:any,
   deleteCard:any,
   createCardName:string|null,
-  reloadCardName:string|null,
+  reloadCardName1:string|null,
+  reloadCardName2:string|null,
+  reloadCardName3:string|null,
+  reloadCardName4:string|null,
+  priorityDue:boolean,
+  selectPriorityDue:any,
 }) =>{
   const [deleteCheck, setDeleteCheck] = useState<boolean>(true);
   const [tasks,setTasks]=useState<TaskCardProps[]>(props.topics);
+  const [priorityDue,setPriorityDue]=useState<boolean>(props.priorityDue);
   useEffect(()=>{
     setTasks(props.topics)
-  },[props.topics])
+  },[props.topics]);
+  useEffect(()=>{
+    setPriorityDue(props.priorityDue)
+  },[props.priorityDue]);
   const switchDelete = () => {
     if(deleteCheck){
       setDeleteCheck(false);
@@ -83,9 +139,12 @@ const ContentTitle = (props:{
                 }}
               >
                 <Grid xs={8} sx={{maxHeight:"100%"}}>
-                  <Typography align="justify" variant="h4" >{props.contentTitleName}</Typography>
-                  <Button onClick={()=>{props.createCard().then(()=>{props.reloadCard()})}}>{props.createCardName}</Button>
-                  <Button onClick={()=>{props.reloadCard()}}>{props.reloadCardName}</Button>
+                  <Typography align="justify" variant="h5" >{props.contentTitleName}</Typography>
+                  <Button onClick={()=>{props.createCard().then(()=>{props.createCard()})}}>{props.createCardName}</Button>
+                  <Button onClick={()=>{props.reloadCard1()}}>{props.reloadCardName1}</Button>
+                  <Button onClick={()=>{props.reloadCard2()}}>{props.reloadCardName4}</Button>
+                  <Button onClick={()=>{props.getEndTasks()}}>{props.reloadCardName2}</Button>
+                  <Button onClick={()=>{props.getAllTasks()}}>{props.reloadCardName3}</Button>
                   <Button onClick={()=>{switchDelete()}}>{deleteCheck?"削除ロック解除":"削除ロック"}</Button>
                 </Grid>
                 <Grid xs={4} sx={{height:"100%"}}>
@@ -137,7 +196,7 @@ const ContentTitle = (props:{
                         updateCard={props.updateCard}
                         deleteNG={deleteCheck}
                         deleteTask={props.deleteCard}
-                        reloadTasks={props.reloadCard}
+                        reloadTasks={props.reloadCard1}
                       />
                     </Item>
                   ))

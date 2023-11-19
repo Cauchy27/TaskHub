@@ -70,14 +70,15 @@ const TaskCard = (props:topicProps) => {
     if(cardEdit){
       setCardEdit(false);
       console.log("ここで保存を投げる");
-      const today:Date = new Date(taskFrom);
+      const from:Date = new Date(taskFrom);
+      const due:Date = new Date(taskDue);
       const updateTaskData:TaskCardProps = {
         task_id:taskId,
         task_name:taskName,
         task_detail:taskDetail,
         task_point:taskPoint,
-        task_from:today,
-        task_due:today,
+        task_from:from,
+        task_due:due,
         task_priority:taskPriority,
         task_tag_id:taskTagId,
         task_end:taskEnd,
@@ -257,6 +258,7 @@ const TaskCard = (props:topicProps) => {
               size="small"
               defaultValue={taskPriority}
               sx={{ m: 1, width: '25ch' }}
+              onChange={(event)=>{setTaskPriority(Number(event.target.value))}}
             >
               {priorities.map((value) => (
                 <MenuItem key={value} value={value}>

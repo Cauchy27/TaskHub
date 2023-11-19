@@ -32,6 +32,7 @@ export default function Right(props:any) {
 
   const [taskData, setTaskData] = useState<TaskCardProps[]|any>([]);
   const [taskTags, setTaskTags] = useState<TaskTagProps[]|any>([]);
+  const [priorityDue, setPriorityDue] = useState<boolean>(true);
 
   const getCurrentUser = async () => {
     // ログインのセッションを取得する処理
@@ -53,11 +54,59 @@ export default function Right(props:any) {
     }
     return;
   }
-  const getTasks = async()=>{
+  // ユーザーID
+  const getAllTasks = async()=>{
     let { data, error, status } = await Supabase
       .from('task')
       .select(`task_id, task_name, task_detail, task_point, task_from, task_due, task_end, task_priority, task_tag_id, task_user_id,  task_user_id`)
-      .eq('task_user_id', userData.id);
+      .eq('task_user_id', userData.id)
+      .order('task_due', { ascending: true })
+      .order('task_priority', { ascending: true });
+    console.log(data);
+    console.log(error);
+    if(data){
+      setTaskData(data);
+    }
+  }
+  // ユーザーID & 完了
+  const getEndTasks = async()=>{
+    let { data, error, status } = await Supabase
+      .from('task')
+      .select(`task_id, task_name, task_detail, task_point, task_from, task_due, task_end, task_priority, task_tag_id, task_user_id,  task_user_id`)
+      .eq('task_user_id', userData.id)
+      .gt("task_point",99)
+      .order('task_due', { ascending: true })
+      .order('task_priority', { ascending: true });
+    console.log(data);
+    console.log(error);
+    if(data){
+      setTaskData(data);
+    }
+  }
+  // ユーザーID ＆ 未完了（期日）
+  const getTasks1 = async()=>{
+    let { data, error, status } = await Supabase
+      .from('task')
+      .select(`task_id, task_name, task_detail, task_point, task_from, task_due, task_end, task_priority, task_tag_id, task_user_id,  task_user_id`)
+      .eq('task_user_id', userData.id)
+      .lt("task_point",100)
+      .order('task_due', { ascending: true })
+      .order('task_priority', { ascending: true });
+    console.log(data);
+    console.log(error);
+    if(data){
+      setTaskData(data);
+    }
+  }
+  // ユーザーID ＆ 未完了（優先度）
+  const getTasks2 = async()=>{
+    let { data, error, status } = await Supabase
+      .from('task')
+      .select(`task_id, task_name, task_detail, task_point, task_from, task_due, task_end, task_priority, task_tag_id, task_user_id,  task_user_id`)
+      .eq('task_user_id', userData.id)
+      .lt("task_point",100)
+      .order('task_priority', { ascending: true })
+      .order('task_due', { ascending: true });
     console.log(data);
     console.log(error);
     if(data){
@@ -76,7 +125,6 @@ export default function Right(props:any) {
     }
   }
   const today:Date = new Date();
-  const nextDay:Date = new Date(today.getDate() + 1);
   const insertTask = async() => {
     const { error } = await Supabase
       .from('task')
@@ -85,7 +133,7 @@ export default function Right(props:any) {
         task_detail: 'ここにタスクの内容を入力',
         task_point:0,
         task_from:today,
-        task_due:nextDay,
+        task_due:today,
         task_end:null,
         task_priority:0,
         task_tag_id:null,
@@ -119,7 +167,7 @@ export default function Right(props:any) {
   }
   useEffect(()=>{
     getCurrentUser();
-    getTasks();
+    getTasks1();
     getTaskTags();
   },[userData]);
 
@@ -185,11 +233,19 @@ export default function Right(props:any) {
                   logout={Logout}
                   image_url={userPicture}
                   createCard={insertTask}
-                  reloadCard={getTasks}
+                  reloadCard1={getTasks1}
+                  reloadCard2={getTasks2}
                   updateCard={updateTask}
                   deleteCard={deleteTask}
                   createCardName={"タスク新規作成"}
-                  reloadCardName={"リスト更新"}
+                  reloadCardName1={"未完了のみ\n[期日]"}
+                  reloadCardName4={"未完了のみ\n[優先度]"}
+                  reloadCardName2={"完了のみ"}
+                  reloadCardName3={"全て"}
+                  getAllTasks={getAllTasks}
+                  getEndTasks={getEndTasks}
+                  priorityDue={priorityDue}
+                  selectPriorityDue={setPriorityDue}
                 />
               </Box>
             </Grid>
