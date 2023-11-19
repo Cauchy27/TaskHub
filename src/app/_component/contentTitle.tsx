@@ -160,7 +160,7 @@ const ContentTitle = (props:{
                     }}
                   >
                     <Grid xs={3} sx={{height:"100%",width:"100%"}}>
-                      <Avatar sx={{height:80,width:80,ml:"20%"}} alt="Cindy Baker" src={props.image_url} />
+                      <Avatar sx={{height:100,width:100,ml:"20%"}} alt="Cindy Baker" src={props.image_url} />
                       <Button sx={{width:100,ml:"20%"}} onClick={()=>{props.logout()}}>ログアウト</Button>
                     </Grid>
                     {/* <Grid xs={3} sx={{maxHeight:"100%",pl:"3%"}}>
