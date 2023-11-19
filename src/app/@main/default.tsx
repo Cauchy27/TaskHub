@@ -18,10 +18,11 @@ import '@fontsource/roboto/700.css';
 
 import LeftSideBar from "../_component/leftsidebar";
 import GoogleAuth from "../_component/googleAuth";
-import ContentTitle from "../_component/contentTitle";
+import ContentTitle from "../_component/TaskScreen";
+import CompileScreen from "../_component/compileScreen";
 import { Supabase } from "../_component/config/supabase";
 
-import { TaskCardProps, TaskTagProps } from "../_component/config/propsType";
+import { TaskCardProps, TaskTagProps, CompileTaskProps } from "../_component/config/propsType";
 
 export default function Right(props:any) {
   const [showScreen, setShowScreen] = useState<string>("タスク管理");
@@ -34,11 +35,14 @@ export default function Right(props:any) {
   const [taskTags, setTaskTags] = useState<TaskTagProps[]|any>([]);
   const [priorityDue, setPriorityDue] = useState<boolean>(true);
 
+  const [compileTasks, setCompileTasks] = useState<CompileTaskProps[]>([]);
+  const [sessionOk, setSessionOk] = useState<boolean>(false);
+
   const getCurrentUser = async () => {
     // ログインのセッションを取得する処理
     const { data } = await Supabase.auth.getSession()
     // セッションがあるときだけ現在ログインしているユーザーを取得する
-    if (data.session !== null) {
+    if (data.session !== null && !sessionOk) {
       // supabaseに用意されている現在ログインしているユーザーを取得する関数
       const { data: { user } } = await Supabase.auth.getUser()
       // currentUserにユーザーのメールアドレスを格納
@@ -50,6 +54,12 @@ export default function Right(props:any) {
           // console.log(data.session?.user.identities[0].identity_data.picture);
           setUserPicture(data.session?.user.identities[0].identity_data.picture)
         }
+        setSessionOk(true);
+      }
+    }
+    else{
+      if(!sessionOk){
+        setSessionOk(false);
       }
     }
     return;
@@ -58,7 +68,7 @@ export default function Right(props:any) {
   const getAllTasks = async()=>{
     let { data, error, status } = await Supabase
       .from('task')
-      .select(`task_id, task_name, task_detail, task_point, task_from, task_due, task_end, task_priority, task_tag_id, task_user_id,  task_user_id`)
+      .select(`task_id, task_name, task_detail, task_point, task_from, task_due, task_end, task_priority, task_tag_id, task_user_id`)
       .eq('task_user_id', userData.id)
       .order('task_due', { ascending: true })
       .order('task_priority', { ascending: true });
@@ -72,7 +82,7 @@ export default function Right(props:any) {
   const getEndTasks = async()=>{
     let { data, error, status } = await Supabase
       .from('task')
-      .select(`task_id, task_name, task_detail, task_point, task_from, task_due, task_end, task_priority, task_tag_id, task_user_id,  task_user_id`)
+      .select(`task_id, task_name, task_detail, task_point, task_from, task_due, task_end, task_priority, task_tag_id, task_user_id`)
       .eq('task_user_id', userData.id)
       .gt("task_point",99)
       .order('task_due', { ascending: true })
@@ -87,7 +97,7 @@ export default function Right(props:any) {
   const getTasks1 = async()=>{
     let { data, error, status } = await Supabase
       .from('task')
-      .select(`task_id, task_name, task_detail, task_point, task_from, task_due, task_end, task_priority, task_tag_id, task_user_id,  task_user_id`)
+      .select(`task_id, task_name, task_detail, task_point, task_from, task_due, task_end, task_priority, task_tag_id, task_user_id`)
       .eq('task_user_id', userData.id)
       .lt("task_point",100)
       .order('task_due', { ascending: true })
@@ -102,7 +112,7 @@ export default function Right(props:any) {
   const getTasks2 = async()=>{
     let { data, error, status } = await Supabase
       .from('task')
-      .select(`task_id, task_name, task_detail, task_point, task_from, task_due, task_end, task_priority, task_tag_id, task_user_id,  task_user_id`)
+      .select(`task_id, task_name, task_detail, task_point, task_from, task_due, task_end, task_priority, task_tag_id, task_user_id`)
       .eq('task_user_id', userData.id)
       .lt("task_point",100)
       .order('task_priority', { ascending: true })
@@ -167,9 +177,29 @@ export default function Right(props:any) {
   }
   useEffect(()=>{
     getCurrentUser();
+  },[sessionOk]);
+  useEffect(()=>{
     getTasks1();
     getTaskTags();
   },[userData]);
+
+  // 集計用
+  const getAllCompileTasks = async(from:string,to:string)=>{
+    let { data, error, status } = await Supabase
+      .from('task')
+      .select(`task_name,task_point, task_from, task_due, task_end, task_priority, task_tag_id, task_user_id`)
+      .eq('task_user_id', userData.id)
+      .gte("task_from",from)
+      .lte("task_due",to)
+      .order('task_due', { ascending: true })
+      .order('task_priority', { ascending: true });
+    console.log(data);
+    console.log(error);
+    if(data){
+      setCompileTasks(data);
+    }
+    return;
+  }
 
   // const router = useRouter();
   const Logout = async() => {
@@ -224,29 +254,43 @@ export default function Right(props:any) {
                   m:"1%"
                 }} 
               >
-                <ContentTitle
-                  contentTitleName={showScreen}
-                  Account={Account}
-                  topics={taskData}
-                  subtopic={taskTags}
-                  checkLogin={getCurrentUser}
-                  logout={Logout}
-                  image_url={userPicture}
-                  createCard={insertTask}
-                  reloadCard1={getTasks1}
-                  reloadCard2={getTasks2}
-                  updateCard={updateTask}
-                  deleteCard={deleteTask}
-                  createCardName={"タスク作成"}
-                  reloadCardName1={"未完了[期日]"}
-                  reloadCardName4={"未完了[優先度]"}
-                  reloadCardName2={"完了"}
-                  reloadCardName3={"全て"}
-                  getAllTasks={getAllTasks}
-                  getEndTasks={getEndTasks}
-                  priorityDue={priorityDue}
-                  selectPriorityDue={setPriorityDue}
-                />
+                {
+                  showScreen =="タスク管理" &&
+                  <ContentTitle
+                    contentTitleName={showScreen}
+                    Account={Account}
+                    topics={taskData}
+                    subtopic={taskTags}
+                    checkLogin={getCurrentUser}
+                    logout={Logout}
+                    image_url={userPicture}
+                    createCard={insertTask}
+                    reloadCard1={getTasks1}
+                    reloadCard2={getTasks2}
+                    updateCard={updateTask}
+                    deleteCard={deleteTask}
+                    createCardName={"タスク作成"}
+                    reloadCardName1={"未完了[期日]"}
+                    reloadCardName4={"未完了[優先度]"}
+                    reloadCardName2={"完了"}
+                    reloadCardName3={"全て"}
+                    getAllTasks={getAllTasks}
+                    getEndTasks={getEndTasks}
+                    priorityDue={priorityDue}
+                    selectPriorityDue={setPriorityDue}
+                  />
+                }
+                {
+                  showScreen =="タスク集計" &&
+                  <CompileScreen
+                    contentTitleName={showScreen}
+                    Account={Account}
+                    logout={Logout}
+                    image_url={userPicture}
+                    getAllCompileTasks={getAllCompileTasks}
+                    compileTasks={compileTasks}
+                  />
+                }
               </Box>
             </Grid>
           </>

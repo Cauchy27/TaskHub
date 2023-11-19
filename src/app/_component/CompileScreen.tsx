@@ -6,7 +6,7 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
-import { TaskCardProps, TaskTagProps } from './config/propsType';
+import { TaskCardProps, TaskTagProps, CompileTaskProps } from './config/propsType';
 import TaskCard from './taskCard';
 import { Button } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
@@ -14,6 +14,9 @@ import Switch, { SwitchProps } from '@mui/material/Switch';
 import Stack from '@mui/material/Stack';
 
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
+
+import SearchBox from './searchBox';
+import CompileDisplay from './compileDisplay';
 
 const AntSwitch = styled(Switch)(({ theme }) => ({
   width: 28,
@@ -70,7 +73,18 @@ const ItemTop = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   textAlign: 'center',
   color: theme.palette.text.secondary,
+  backgroundColor:"#fae9bd",
   height: "20%",
+  lineHeight: '60px',
+  minWidth:"100%",
+  overflow: 'auto'
+}));
+const ItemSearch = styled(Paper)(({ theme }) => ({
+  ...theme.typography.body1,
+  // textAlign: 'center',
+  color: theme.palette.text.secondary,
+  backgroundColor:"#fdf9ec",
+  height: "100%",
   lineHeight: '60px',
   minWidth:"100%",
   overflow: 'auto'
@@ -79,46 +93,17 @@ const ItemTop = styled(Paper)(({ theme }) => ({
 const darkTheme = createTheme({ palette: { mode: 'dark' } });
 const lightTheme = createTheme({ palette: { mode: 'light' } });
 
-const ContentTitle = (props:{
+type CompileProps ={
   Account:string|null,
   contentTitleName:string,
-  topics:TaskCardProps[],
-  subtopic:TaskTagProps[],
-  checkLogin:any,
   logout:any,
   image_url:string,
-  createCard:any,
-  reloadCard1:any,
-  reloadCard2:any,
-  getAllTasks:any,
-  getEndTasks:any,
-  updateCard:any,
-  deleteCard:any,
-  createCardName:string|null,
-  reloadCardName1:string|null,
-  reloadCardName2:string|null,
-  reloadCardName3:string|null,
-  reloadCardName4:string|null,
-  priorityDue:boolean,
-  selectPriorityDue:any,
-}) =>{
-  const [deleteCheck, setDeleteCheck] = useState<boolean>(true);
-  const [tasks,setTasks]=useState<TaskCardProps[]>(props.topics);
-  const [priorityDue,setPriorityDue]=useState<boolean>(props.priorityDue);
-  useEffect(()=>{
-    setTasks(props.topics)
-  },[props.topics]);
-  useEffect(()=>{
-    setPriorityDue(props.priorityDue)
-  },[props.priorityDue]);
-  const switchDelete = () => {
-    if(deleteCheck){
-      setDeleteCheck(false);
-    }
-    else{
-      setDeleteCheck(true);
-    }
-  }
+  getAllCompileTasks:any,
+  compileTasks:CompileTaskProps[],
+}
+
+const CompileScreen = (props:CompileProps) => {
+
   return(
     <div style={{height:"100%",overflow:"scroll"}}>
       {
@@ -142,12 +127,7 @@ const ContentTitle = (props:{
               >
                 <Grid xs={9} sx={{maxHeight:"100%"}}>
                   <Typography align="justify" variant="h5" >{props.contentTitleName}</Typography>
-                  <Button sx={{ m: 1,}} variant="outlined" onClick={()=>{props.createCard().then(()=>{props.reloadCard1()})}}>{props.createCardName}</Button>
-                  <Button sx={{ m: 1, }} variant="outlined" onClick={()=>{props.reloadCard1()}}>{props.reloadCardName1}</Button>
-                  <Button sx={{ m: 1,}} variant="outlined" onClick={()=>{props.reloadCard2()}}>{props.reloadCardName4}</Button>
-                  <Button sx={{ m: 1,}} variant="outlined" onClick={()=>{props.getEndTasks()}}>{props.reloadCardName2}</Button>
-                  <Button sx={{ m: 1,}} variant="outlined" onClick={()=>{props.getAllTasks()}}>{props.reloadCardName3}</Button>
-                  <Button sx={{ m: 1,}} variant="outlined" onClick={()=>{switchDelete()}}>{deleteCheck?"削除ロック解除":"削除ロック"}</Button>
+                  <Typography>現在準備中です。<br/>期日と終了日からタスクの達成ポイントなどを集計する予定です。</Typography>
                 </Grid>
                 <Grid xs={3} sx={{height:"100%"}}>
                   <Grid container spacing={2} 
@@ -173,44 +153,53 @@ const ContentTitle = (props:{
                 </Grid>
               </Grid>
             </ItemTop>
-            <div style={{height:"80%",overflow:"scroll"}}>
-              <Box
-                sx={{
-                  p: 2,
-                  borderRadius: 2,
-                  // bgcolor: 'background.default',
-                  display: 'grid',
-                  gridTemplateColumns: { md: '1fr 1fr' },
-                  gap: 2,
-                  width:"100%",
-                  overflow:"auto",
-                  height:"100%"
-                }}
-              >
-                {
-                  props.topics.map((topic:TaskCardProps,key)=>(
-                    <Item elevation={12} key={key}>
-                      {/* <Typography align="justify" variant="h4" >
-                        {topic.task_name}
-                      </Typography> */}
-                      <TaskCard
-                        topic={topic}
-                        subtopic={props.subtopic}
-                        updateCard={props.updateCard}
-                        deleteNG={deleteCheck}
-                        deleteTask={props.deleteCard}
-                        reloadTasks={props.reloadCard1}
-                      />
-                    </Item>
-                  ))
-                }
-              </Box>
+            <div style={{height:"20%",overflow:"scroll"}}>
+              <ItemSearch elevation={24} sx={{mt:1}}>
+                <Box
+                  sx={{
+                    p: 2,
+                    borderRadius: 10,
+                    // bgcolor: 'background.default',
+                    // display: 'grid',
+                    gridTemplateColumns: { md: '1fr 1fr' },
+                    gap: 2,
+                    width:"100%",
+                    overflow:"auto",
+                    height:"100%"
+                  }}
+                >
+                  <SearchBox
+                    getAllCompileTasks={props.getAllCompileTasks}
+                  />
+                </Box>
+              </ItemSearch>
+            </div>
+            <div style={{height:"60%",overflow:"scroll"}}>
+              <ItemSearch elevation={24} sx={{mt:1}}>
+                <Box
+                  sx={{
+                    p: 2,
+                    borderRadius: 10,
+                    // bgcolor:"yellow",
+                    // display: 'grid',
+                    gridTemplateColumns: { md: '1fr 1fr' },
+                    gap: 2,
+                    width:"100%",
+                    overflow:"auto",
+                    height:"100%"
+                  }}
+                >
+                  <CompileDisplay
+                    compileTasks={props.compileTasks}
+                  />
+                </Box>
+              </ItemSearch>
             </div>
           </ThemeProvider>
         </>
       }
     </div>
-  )
+  );
 }
 
-export default ContentTitle;
+export default CompileScreen;

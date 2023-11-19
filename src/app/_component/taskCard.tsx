@@ -115,7 +115,7 @@ const TaskCard = (props:topicProps) => {
   }
 
   return(
-    <React.Fragment>
+    <div style={{backgroundColor:taskPoint>=100?"#fefde2":"",height:"100%"}}>
       <CardContent>
         {
           !cardEdit &&
@@ -308,7 +308,7 @@ const TaskCard = (props:topicProps) => {
           </>
         }
       </CardContent>
-    </React.Fragment>
+    </div>
   )
 }
 

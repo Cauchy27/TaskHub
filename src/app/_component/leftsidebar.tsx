@@ -81,7 +81,7 @@ const MenuList:MenuList[] =[
       {
         subtitle:"タスク集計",
         subicon:<Assessment/>,
-        disabled:true,
+        disabled:false,
       },
     ],
     icon:<SendIcon />,
