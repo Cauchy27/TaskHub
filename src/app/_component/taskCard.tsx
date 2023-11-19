@@ -140,7 +140,7 @@ const TaskCard = (props:topicProps) => {
               </Grid>
               <Grid xs={4}>
                 <Typography color="text.secondary">
-                  From：{taskFrom}<br/>
+                  Start：{taskFrom}<br/>
                   Due：{taskDue}
                 </Typography>
               </Grid>
@@ -238,7 +238,7 @@ const TaskCard = (props:topicProps) => {
               defaultValue = {taskFrom}
               margin="dense"
               size="small"
-              label="from"
+              label="start"
               onChange = {
                 (event) => {
                   setTaskFrom(event.target.value);
