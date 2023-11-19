@@ -61,7 +61,7 @@ const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   textAlign: 'center',
   color: theme.palette.text.secondary,
-  height: 200,
+  height: 250,
   lineHeight: '60px',
   minWidth:"100%",
   overflow: 'auto'
