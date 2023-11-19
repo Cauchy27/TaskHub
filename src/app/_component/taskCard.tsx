@@ -201,7 +201,7 @@ const TaskCard = (props:topicProps) => {
                     setTaskName(event.target.value)
                   }
                 }
-                sx={{ m: 1, width: '25ch' }}
+                // sx={{ m: 1, width: '25ch' }}
             />
             <TextField
               type="number"

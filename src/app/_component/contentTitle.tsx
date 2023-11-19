@@ -140,7 +140,7 @@ const ContentTitle = (props:{
                   m:"1%"
                 }}
               >
-                <Grid xs={8} sx={{maxHeight:"100%"}}>
+                <Grid xs={9} sx={{maxHeight:"100%"}}>
                   <Typography align="justify" variant="h5" >{props.contentTitleName}</Typography>
                   <Button sx={{ m: 1,}} variant="outlined" onClick={()=>{props.createCard().then(()=>{props.reloadCard1()})}}>{props.createCardName}</Button>
                   <Button sx={{ m: 1, }} variant="outlined" onClick={()=>{props.reloadCard1()}}>{props.reloadCardName1}</Button>
@@ -149,7 +149,7 @@ const ContentTitle = (props:{
                   <Button sx={{ m: 1,}} variant="outlined" onClick={()=>{props.getAllTasks()}}>{props.reloadCardName3}</Button>
                   <Button sx={{ m: 1,}} variant="outlined" onClick={()=>{switchDelete()}}>{deleteCheck?"削除ロック解除":"削除ロック"}</Button>
                 </Grid>
-                <Grid xs={3.5} sx={{height:"100%"}}>
+                <Grid xs={3} sx={{height:"100%"}}>
                   <Grid container spacing={2} 
                     sx={{
                       height:"100%",
@@ -159,13 +159,14 @@ const ContentTitle = (props:{
                       m:"0%"
                     }}
                   >
-                    <Grid xs={3} sx={{height:"100%",width:"50%"}}>
+                    <Grid xs={3} sx={{height:"100%",width:"100%"}}>
                       <Avatar sx={{height:80,width:80}} alt="Cindy Baker" src={props.image_url} />
-                    </Grid>
-                    <Grid xs={8} sx={{maxHeight:"100%",pl:"3%"}}>
-                      <Typography>{props.Account}</Typography>
                       <Button onClick={()=>{props.logout()}}>ログアウト</Button>
                     </Grid>
+                    {/* <Grid xs={3} sx={{maxHeight:"100%",pl:"3%"}}>
+                      <Typography>{props.Account}</Typography>
+                      
+                    </Grid> */}
                   </Grid>
                   
                   {/* <Button onClick={()=>{props.checkLogin()}}>ログインチェック</Button> */}
