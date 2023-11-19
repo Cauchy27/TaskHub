@@ -304,7 +304,7 @@ const TaskCard = (props:topicProps) => {
               }
               sx={{ m: 1, width: '15ch' }}
             />
-            <Button variant="outlined" sx={{ m: 1, width: '15ch' }} size="small" onClick={()=>{changeEdit()}} endIcon={<CreateIcon />}>{cardEdit?"保存":"編集"}</Button>
+            <Button variant="outlined" sx={{ m: 1, width: '20ch' }} size="small" onClick={()=>{changeEdit()}} endIcon={<CreateIcon />}>{cardEdit?"保存":"編集"}</Button>
           </>
         }
       </CardContent>
