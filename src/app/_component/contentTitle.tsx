@@ -13,6 +13,8 @@ import Avatar from '@mui/material/Avatar';
 import Switch, { SwitchProps } from '@mui/material/Switch';
 import Stack from '@mui/material/Stack';
 
+import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
+
 const AntSwitch = styled(Switch)(({ theme }) => ({
   width: 28,
   height: 16,
@@ -59,7 +61,7 @@ const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   textAlign: 'center',
   color: theme.palette.text.secondary,
-  height: 200,
+  height: 250,
   lineHeight: '60px',
   minWidth:"100%",
   overflow: 'auto'
@@ -138,16 +140,16 @@ const ContentTitle = (props:{
                   m:"1%"
                 }}
               >
-                <Grid xs={8} sx={{maxHeight:"100%"}}>
+                <Grid xs={9} sx={{maxHeight:"100%"}}>
                   <Typography align="justify" variant="h5" >{props.contentTitleName}</Typography>
-                  <Button onClick={()=>{props.createCard().then(()=>{props.createCard()})}}>{props.createCardName}</Button>
-                  <Button onClick={()=>{props.reloadCard1()}}>{props.reloadCardName1}</Button>
-                  <Button onClick={()=>{props.reloadCard2()}}>{props.reloadCardName4}</Button>
-                  <Button onClick={()=>{props.getEndTasks()}}>{props.reloadCardName2}</Button>
-                  <Button onClick={()=>{props.getAllTasks()}}>{props.reloadCardName3}</Button>
-                  <Button onClick={()=>{switchDelete()}}>{deleteCheck?"削除ロック解除":"削除ロック"}</Button>
+                  <Button sx={{ m: 1,}} variant="outlined" onClick={()=>{props.createCard().then(()=>{props.reloadCard1()})}}>{props.createCardName}</Button>
+                  <Button sx={{ m: 1, }} variant="outlined" onClick={()=>{props.reloadCard1()}}>{props.reloadCardName1}</Button>
+                  <Button sx={{ m: 1,}} variant="outlined" onClick={()=>{props.reloadCard2()}}>{props.reloadCardName4}</Button>
+                  <Button sx={{ m: 1,}} variant="outlined" onClick={()=>{props.getEndTasks()}}>{props.reloadCardName2}</Button>
+                  <Button sx={{ m: 1,}} variant="outlined" onClick={()=>{props.getAllTasks()}}>{props.reloadCardName3}</Button>
+                  <Button sx={{ m: 1,}} variant="outlined" onClick={()=>{switchDelete()}}>{deleteCheck?"削除ロック解除":"削除ロック"}</Button>
                 </Grid>
-                <Grid xs={4} sx={{height:"100%"}}>
+                <Grid xs={3} sx={{height:"100%"}}>
                   <Grid container spacing={2} 
                     sx={{
                       height:"100%",
@@ -157,13 +159,14 @@ const ContentTitle = (props:{
                       m:"0%"
                     }}
                   >
-                    <Grid xs={3} sx={{height:"100%",width:"50%"}}>
-                      <Avatar sx={{height:80,width:80}} alt="Cindy Baker" src={props.image_url} />
+                    <Grid xs={3} sx={{height:"100%",width:"100%"}}>
+                      <Avatar sx={{height:100,width:100,ml:"20%"}} alt="Cindy Baker" src={props.image_url} />
+                      <Button sx={{width:100,ml:"20%"}} onClick={()=>{props.logout()}}>ログアウト</Button>
                     </Grid>
-                    <Grid xs={8} sx={{maxHeight:"100%",pl:"3%"}}>
+                    {/* <Grid xs={3} sx={{maxHeight:"100%",pl:"3%"}}>
                       <Typography>{props.Account}</Typography>
-                      <Button onClick={()=>{props.logout()}}>ログアウト</Button>
-                    </Grid>
+                      
+                    </Grid> */}
                   </Grid>
                   
                   {/* <Button onClick={()=>{props.checkLogin()}}>ログインチェック</Button> */}

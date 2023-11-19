@@ -16,6 +16,7 @@ import CircularProgressWithLabel from './circleProggressWithLabel';
 
 import CreateIcon from '@mui/icons-material/Create';
 import AddTaskIcon from '@mui/icons-material/AddTask';
+import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 
 const bull = (
   <Box
@@ -92,6 +93,27 @@ const TaskCard = (props:topicProps) => {
     }
   }
 
+  const taskComplete = async() => {
+    setTaskPoint(100);
+    setTaskEnd(today);
+    const from:Date = new Date(taskFrom);
+    const due:Date = new Date(taskDue);
+    const updateTaskData:TaskCardProps = {
+        task_id:taskId,
+        task_name:taskName,
+        task_detail:taskDetail,
+        task_point:100,
+        task_from:from,
+        task_due:due,
+        task_priority:taskPriority,
+        task_tag_id:taskTagId,
+        task_end:today,
+        task_user_id:taskUserId,
+    }
+    console.log(updateTaskData);
+    console.log(props.updateCard(updateTaskData));
+  }
+
   return(
     <React.Fragment>
       <CardContent>
@@ -118,13 +140,13 @@ const TaskCard = (props:topicProps) => {
               </Grid>
               <Grid xs={4}>
                 <Typography color="text.secondary">
-                  From：{taskFrom}<br/>
+                  Start：{taskFrom}<br/>
                   Due：{taskDue}
                 </Typography>
               </Grid>
               <Grid xs={2.5} sx={{m:"2%"}}>
                 <CardActions>
-                  <Button variant="outlined" disabled={props.deleteNG} size="small" endIcon={<AddTaskIcon />} onClick={()=>{
+                  <Button variant="outlined" disabled={props.deleteNG} size="small" endIcon={<DeleteSweepIcon />} onClick={()=>{
                     props.deleteTask(props.topic.task_id).then(()=>{
                       props.reloadTasks();
                     });
@@ -157,7 +179,7 @@ const TaskCard = (props:topicProps) => {
                   <Button variant="outlined" size="small" onClick={()=>{changeEdit()}} endIcon={<CreateIcon />}>{cardEdit?"保存":"編集"}</Button>
                 </CardActions>
                 <CardActions>
-                  <Button variant="outlined" size="small" endIcon={<AddTaskIcon />}>完了</Button>
+                  <Button variant="outlined" size="small" endIcon={<AddTaskIcon />} onClick={()=>{taskComplete()}}>完了</Button>
                 </CardActions>
               </Grid>
             </Grid>
@@ -179,7 +201,7 @@ const TaskCard = (props:topicProps) => {
                     setTaskName(event.target.value)
                   }
                 }
-                sx={{ m: 1, width: '25ch' }}
+                // sx={{ m: 1, width: '25ch' }}
             />
             <TextField
               type="number"
@@ -193,8 +215,23 @@ const TaskCard = (props:topicProps) => {
                   setTaskEnd(today);
                 }
               }
-              sx={{ m: 1, width: '10ch' }}
+              sx={{ m: 1, width: '15ch' }}
             />
+            <TextField
+              id="outlined-select-currency"
+              select
+              label="優先度"
+              size="small"
+              defaultValue={taskPriority}
+              sx={{ m: 1, width: '15ch' }}
+              onChange={(event)=>{setTaskPriority(Number(event.target.value))}}
+            >
+              {priorities.map((value) => (
+                <MenuItem key={value} value={value}>
+                  {value}
+                </MenuItem>
+              ))}
+            </TextField>
             <Button variant="outlined" sx={{ m: 1, width: '15ch' }} size="small" onClick={()=>{changeEdit()}} endIcon={<CreateIcon />}>{cardEdit?"保存":"編集"}</Button>
             <TextField
                 fullWidth
@@ -216,7 +253,7 @@ const TaskCard = (props:topicProps) => {
               defaultValue = {taskFrom}
               margin="dense"
               size="small"
-              label="from"
+              label="start"
               onChange = {
                 (event) => {
                   setTaskFrom(event.target.value);
@@ -248,21 +285,6 @@ const TaskCard = (props:topicProps) => {
               {taskTags.map((value,key) => (
                 <MenuItem key={key} value={value.task_tag_id}>
                   {value.task_tag_name}
-                </MenuItem>
-              ))}
-            </TextField>
-            <TextField
-              id="outlined-select-currency"
-              select
-              label="優先度"
-              size="small"
-              defaultValue={taskPriority}
-              sx={{ m: 1, width: '25ch' }}
-              onChange={(event)=>{setTaskPriority(Number(event.target.value))}}
-            >
-              {priorities.map((value) => (
-                <MenuItem key={value} value={value}>
-                  {value}
                 </MenuItem>
               ))}
             </TextField>

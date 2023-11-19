@@ -129,8 +129,8 @@ export default function Right(props:any) {
     const { error } = await Supabase
       .from('task')
       .insert({ 
-        task_name: "新規タスク",
-        task_detail: 'ここにタスクの内容を入力',
+        task_name: "",
+        task_detail: '',
         task_point:0,
         task_from:today,
         task_due:today,
@@ -237,10 +237,10 @@ export default function Right(props:any) {
                   reloadCard2={getTasks2}
                   updateCard={updateTask}
                   deleteCard={deleteTask}
-                  createCardName={"タスク新規作成"}
-                  reloadCardName1={"未完了のみ\n[期日]"}
-                  reloadCardName4={"未完了のみ\n[優先度]"}
-                  reloadCardName2={"完了のみ"}
+                  createCardName={"タスク作成"}
+                  reloadCardName1={"未完了[期日]"}
+                  reloadCardName4={"未完了[優先度]"}
+                  reloadCardName2={"完了"}
                   reloadCardName3={"全て"}
                   getAllTasks={getAllTasks}
                   getEndTasks={getEndTasks}
