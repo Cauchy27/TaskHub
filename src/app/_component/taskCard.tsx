@@ -215,7 +215,7 @@ const TaskCard = (props:topicProps) => {
                   setTaskEnd(today);
                 }
               }
-              sx={{ m: 1, width: '10ch' }}
+              sx={{ m: 1, width: '15ch' }}
             />
             <TextField
               id="outlined-select-currency"
@@ -223,7 +223,7 @@ const TaskCard = (props:topicProps) => {
               label="優先度"
               size="small"
               defaultValue={taskPriority}
-              sx={{ m: 1, width: '25ch' }}
+              sx={{ m: 1, width: '15ch' }}
               onChange={(event)=>{setTaskPriority(Number(event.target.value))}}
             >
               {priorities.map((value) => (
