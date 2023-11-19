@@ -18,8 +18,8 @@ import '@fontsource/roboto/700.css';
 
 import LeftSideBar from "../_component/leftsidebar";
 import GoogleAuth from "../_component/googleAuth";
-import ContentTitle from "../_component/TaskScreen";
-import CompileScreen from "../_component/compileScreen";
+import ContentTitle from "../_component/taskView";
+import CompileScreen from "../_component/compileView";
 import { Supabase } from "../_component/config/supabase";
 
 import { TaskCardProps, TaskTagProps, CompileTaskProps } from "../_component/config/propsType";
