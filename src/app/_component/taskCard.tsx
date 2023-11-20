@@ -65,6 +65,10 @@ const TaskCard = (props:topicProps) => {
     setTaskId(props.topic.task_id);
     setTaskUserId(props.topic.task_user_id);
     console.log("update_card");
+
+    if(props.topic.task_name ==""){
+      setCardEdit(true);
+    }
   },[props.topic]);
 
   const changeEdit = () => {
