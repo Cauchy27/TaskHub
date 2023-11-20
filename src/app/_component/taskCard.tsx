@@ -167,7 +167,7 @@ const TaskCard = (props:topicProps) => {
                 }}
             >
               <Grid xs={7}>
-                <Typography align='left' variant="body2">
+                <Typography align='left' variant="body2" sx={{whiteSpace:"pre-wrap"}}>
                   {taskDetail}
                 </Typography>
               </Grid>
