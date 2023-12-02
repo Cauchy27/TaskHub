@@ -247,7 +247,7 @@ const TaskCard = (props:topicProps) => {
                   {taskTimerStart?"停止":"開始"}
                 </Button>
                 {
-                  (taskPoint>0 || !taskTimerStart) &&
+                  taskPoint>0 &&
                   <CircularProgressWithLabel value={taskPoint}/>
                 }
               </Grid>
