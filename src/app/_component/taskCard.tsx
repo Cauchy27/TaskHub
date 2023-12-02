@@ -200,7 +200,8 @@ const TaskCard = (props:topicProps) => {
                   top:0,
                   position:"relative",
                   m:"0%",
-                  p:"0%"
+                  p:"0%",
+                  backgroundColor:taskPoint>=100?"#fefde2":""
                 }}
             >
               <Grid xs={5}>
