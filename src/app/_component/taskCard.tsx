@@ -86,7 +86,7 @@ const TaskCard = (props:topicProps) => {
     if(!taskTimerStart){
       setTaskTimerStart(String(Math.floor(Number(new Date().getTime())/1000)));
       setTimeout(()=>{
-        // changeEdit();
+        changeEdit();
         console.log("timer start");
         console.log(taskTimerStart);
       },1000)
@@ -95,7 +95,11 @@ const TaskCard = (props:topicProps) => {
       console.log(String(Math.round((Math.floor(Number(new Date().getTime())/1000) - Number(taskTimerStart))/60/60*100)/100)+"時間")
       setTaskTimerStart(null);
       setTaskTime(taskTime + Math.round((Math.floor(Number(new Date().getTime())/1000) - Number(taskTimerStart))/60/60*100)/100);
-      // changeEdit();
+      setTimeout(()=>{
+        changeEdit();
+        console.log("timer end");
+        console.log(taskTimerStart);
+      },1000)
     }
   }
 
