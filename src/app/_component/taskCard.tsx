@@ -196,7 +196,7 @@ const TaskCard = (props:topicProps) => {
             <Grid container spacing={2} 
                 sx={{
                   height:"100%",
-                  maxWidth:"98%",
+                  minWidth:"100%",
                   top:0,
                   position:"relative",
                   m:"0%",
