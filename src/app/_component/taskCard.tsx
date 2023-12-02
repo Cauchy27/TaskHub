@@ -76,8 +76,10 @@ const TaskCard = (props:topicProps) => {
     setTaskTimerStart(props.topic.task_timer_start);
     console.log("update_card");
 
-    if(props.topic.task_name =="" && !props.topic.task_timer_start){
-      setCardEdit(true);
+    if(props.topic.task_name ==""){
+      if(props.topic.task_timer_start !=""){
+        setCardEdit(true);
+      }
     }
   },[props.topic]);
 
