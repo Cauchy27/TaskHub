@@ -11,6 +11,9 @@ type TaskCardProps ={
   task_tag_id:string,
   task_end:string|Date,
   task_user_id:string,
+  task_due_edit:string|Date, 
+  task_estimate_time:number, 
+  task_time:number,
 }
 
 type TaskTagProps = {
@@ -27,6 +30,9 @@ type CompileTaskProps = {
   task_priority:number,
   task_tag_id:string,
   task_user_id:string,
+  task_due_edit:string|Date, 
+  task_estimate_time:number, 
+  task_time:number,
 }
 
 export type {

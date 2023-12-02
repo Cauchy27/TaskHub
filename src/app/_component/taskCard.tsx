@@ -13,6 +13,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { TaskCardProps, TaskTagProps } from './config/propsType';
 import CircularProgressWithLabel from './circleProggressWithLabel';
+// import { BarChart } from '@mui/x-charts/BarChart';
 
 import CreateIcon from '@mui/icons-material/Create';
 import AddTaskIcon from '@mui/icons-material/AddTask';
@@ -47,6 +48,10 @@ const TaskCard = (props:topicProps) => {
   const [taskEnd,setTaskEnd]=useState<Date|string>(props.topic.task_end);
   const [taskId, setTaskId]=useState<number>(props.topic.task_id);
   const [taskUserId, setTaskUserId]=useState<string>(props.topic.task_user_id);
+  const [taskDueEdit, setTaskDueEdit]=useState<string|Date|any>(props.topic.task_due_edit);
+  const [taskEstimateTime, setTaskEstimateTime]=useState<number>(props.topic.task_estimate_time);
+  const [taskTime, setTaskTime]=useState<number>(props.topic.task_time);
+
 
   const [taskTags, setTaskTags]=useState<TaskTagProps[]>([props.subtopic])
   const [cardEdit,setCardEdit]=useState<boolean>(false);
@@ -64,6 +69,9 @@ const TaskCard = (props:topicProps) => {
     setTaskEnd(props.topic.task_end);
     setTaskId(props.topic.task_id);
     setTaskUserId(props.topic.task_user_id);
+    setTaskDueEdit(props.topic.task_due_edit);
+    setTaskEstimateTime(props.topic.task_estimate_time);
+    setTaskTime(props.topic.task_time);
     console.log("update_card");
 
     if(props.topic.task_name ==""){
@@ -88,6 +96,9 @@ const TaskCard = (props:topicProps) => {
         task_tag_id:taskTagId,
         task_end:taskEnd,
         task_user_id:taskUserId,
+        task_due_edit:taskDueEdit, 
+        task_estimate_time:taskEstimateTime, 
+        task_time:taskTime,
       }
       console.log(updateTaskData);
       console.log(props.updateCard(updateTaskData));
@@ -113,6 +124,9 @@ const TaskCard = (props:topicProps) => {
         task_tag_id:taskTagId,
         task_end:today,
         task_user_id:taskUserId,
+        task_due_edit:taskDueEdit, 
+        task_estimate_time:taskEstimateTime, 
+        task_time:taskTime,
     }
     console.log(updateTaskData);
     console.log(props.updateCard(updateTaskData));
@@ -135,30 +149,25 @@ const TaskCard = (props:topicProps) => {
                 }}
             >
               <Grid xs={5}>
-                <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
+                <Typography sx={{ fontSize: 12 }} align='left' color="text.secondary" gutterBottom>
                   {taskTagId?taskTagId:"[タグ登録なし]"} {bull} 優先度：{taskPriority}
                 </Typography>
-                <Typography variant="h5" component="div">
-                  {taskName}
+              </Grid>
+              <Grid xs={5}>
+                <Typography color="text.secondary" sx={{ fontSize: 12 }} align='left'>
+                  {/* Start：{taskFrom}<br/> */}
+                  期日：{taskDue}
                 </Typography>
               </Grid>
-              <Grid xs={4}>
-                <Typography color="text.secondary">
-                  Start：{taskFrom}<br/>
-                  Due：{taskDue}
+              {/* <Grid xs={4.5}>
+                <Typography color="text.secondary" sx={{fontSize: 12}} align='left'>
+                経過 / 見積：{taskEstimateTime?taskTime+"h / "+taskEstimateTime+"h":"[未設定]"} 
                 </Typography>
-              </Grid>
-              <Grid xs={2.5} sx={{m:"2%"}}>
-                <CardActions>
-                  <Button variant="outlined" disabled={props.deleteNG} size="small" endIcon={<DeleteSweepIcon />} onClick={()=>{
-                    props.deleteTask(props.topic.task_id).then(()=>{
-                      props.reloadTasks();
-                    });
-
-                  }}>削除</Button>
-                </CardActions>
-              </Grid>
+              </Grid> */}
             </Grid>
+            <Typography variant="h5" component="div" align='left' sx={{overflowWrap:"break-word"}}>
+              {taskName}
+            </Typography>
             <Grid container spacing={2} 
                 sx={{
                   height:"100%",
@@ -167,19 +176,41 @@ const TaskCard = (props:topicProps) => {
                   maxWidth:"98%",
                   top:0,
                   position:"relative",
-                  m:"0%"
+                  mt:"2%"
                 }}
             >
               <Grid xs={7}>
-                <Typography align='left' variant="body2" sx={{whiteSpace:"pre-wrap"}}>
+                <Typography align='left' variant="body2" sx={{whiteSpace:"pre-wrap",ml:"2%",overflowWrap:"break-word"}}>
                   {taskDetail}
                 </Typography>
               </Grid>
-              <Grid xs={2}>
-                <CircularProgressWithLabel value={taskPoint}/>
+              <Grid xs={2} sx={{ml:"1%",mr:"1%"}}>
+                <Typography color="text.secondary" sx={{fontSize: 12}}>
+                  見積：{taskEstimateTime?taskEstimateTime+"h":"[未]"} 
+                </Typography>
+                <Typography color="text.secondary" sx={{fontSize: 12,mt:"3%"}}>
+                  経過：{taskEstimateTime?taskTime+"h":"[未]"} 
+                </Typography>
+                {
+                  taskPoint>0 &&
+                  <CircularProgressWithLabel value={taskPoint}/>
+                }
+                {
+                  (taskPoint == 0 || !taskPoint) &&
+                  <Typography color="text.secondary" sx={{fontSize: 12,mt:"10%"}}>
+                    
+                  </Typography>
+                }
               </Grid>
-              <Grid xs={2.5} sx={{m:"2%"}}>
-              <CardActions>
+              <Grid xs={2.5} sx={{ml:"1%",mr:"1%"}}>
+                <CardActions>
+                  <Button variant="outlined" disabled={props.deleteNG} size="small" endIcon={<DeleteSweepIcon />} onClick={()=>{
+                    props.deleteTask(props.topic.task_id).then(()=>{
+                      props.reloadTasks();
+                    });
+                  }}>削除</Button>
+                </CardActions>
+                <CardActions>
                   <Button variant="outlined" size="small" onClick={()=>{changeEdit()}} endIcon={<CreateIcon />}>{cardEdit?"保存":"編集"}</Button>
                 </CardActions>
                 <CardActions>
@@ -193,7 +224,7 @@ const TaskCard = (props:topicProps) => {
           cardEdit &&
           <>
             <TextField
-                fullWidth
+                // fullWidth
                 type="text"
                 variant="standard"
                 defaultValue={taskName}
@@ -205,8 +236,9 @@ const TaskCard = (props:topicProps) => {
                     setTaskName(event.target.value)
                   }
                 }
-                // sx={{ m: 1, width: '25ch' }}
+                sx={{ m: 1, width: '40ch' }}
             />
+            <Button variant="outlined" sx={{ m: 1, width: '15ch' }} size="small" onClick={()=>{changeEdit()}} endIcon={<CreateIcon />}>{cardEdit?"保存":"編集"}</Button>
             <TextField
               type="number"
               defaultValue = {taskPoint}
@@ -216,10 +248,15 @@ const TaskCard = (props:topicProps) => {
               onChange = {
                 (event) => {
                   setTaskPoint(Number(event.target.value));
-                  setTaskEnd(today);
+                  if(Number(event.target.value)>=100){
+                    setTaskEnd(today);
+                  }
+                  else{
+                    setTaskEnd("");
+                  }
                 }
               }
-              sx={{ m: 1, width: '15ch' }}
+              sx={{ m: 1, width: '12ch' }}
             />
             <TextField
               id="outlined-select-currency"
@@ -227,7 +264,7 @@ const TaskCard = (props:topicProps) => {
               label="優先度"
               size="small"
               defaultValue={taskPriority}
-              sx={{ m: 1, width: '15ch' }}
+              sx={{ m: 1, width: '12ch' }}
               onChange={(event)=>{setTaskPriority(Number(event.target.value))}}
             >
               {priorities.map((value) => (
@@ -236,7 +273,32 @@ const TaskCard = (props:topicProps) => {
                 </MenuItem>
               ))}
             </TextField>
-            <Button variant="outlined" sx={{ m: 1, width: '15ch' }} size="small" onClick={()=>{changeEdit()}} endIcon={<CreateIcon />}>{cardEdit?"保存":"編集"}</Button>
+            <TextField
+              type="number"
+              defaultValue = {taskEstimateTime}
+              margin="dense"
+              size="small"
+              label="見積[h]"
+              onChange = {
+                (event) => {
+                  setTaskEstimateTime(Number(event.target.value));
+                }
+              }
+              sx={{ m: 1, width: '12ch' }}
+            />
+             <TextField
+              type="number"
+              defaultValue = {taskTime}
+              margin="dense"
+              size="small"
+              label="経過[h]"
+              onChange = {
+                (event) => {
+                  setTaskTime(Number(event.target.value));
+                }
+              }
+              sx={{ m: 1, width: '12ch' }}
+            />
             <TextField
                 fullWidth
                 margin="dense"

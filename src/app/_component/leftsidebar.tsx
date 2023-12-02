@@ -149,7 +149,7 @@ const LeftSideBar:any = (props:{
     props.changeShowScreen(pageId);
   }
   return (
-    <div style={{height:"100%",overflow:"scroll"}}>
+    <div className="contents_box" style={{height:"100%",overflow:"scroll"}}>
       <List
         sx={{ 
             width: '100%', 

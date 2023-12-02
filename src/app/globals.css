@@ -25,3 +25,16 @@ body {
     )
     /* rgb(var(--background-start-rgb)); */
 }
+
+.contents_box{
+  /* width: 400px;
+  height: 150px;
+  background-color: aquamarine; */
+  overflow: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+ 
+ .contents_box::-webkit-scrollbar{
+   display: none;
+ }

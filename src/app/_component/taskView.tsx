@@ -175,7 +175,7 @@ const ContentTitle = (props:{
                 </Grid>
               </Grid>
             </ItemTop>
-            <div style={{height:"80%",overflow:"scroll"}}>
+            <div className="contents_box" style={{height:"80%",overflow:"scroll"}}>
               <Box
                 sx={{
                   p: 2,

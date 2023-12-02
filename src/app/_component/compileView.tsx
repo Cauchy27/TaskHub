@@ -105,7 +105,7 @@ type CompileProps ={
 const CompileScreen = (props:CompileProps) => {
 
   return(
-    <div style={{height:"100%",overflow:"scroll"}}>
+    <div className="contents_box" style={{height:"100%",overflow:"scroll"}}>
       {
         !props.Account &&
         <Typography align="justify" variant="h2">権限がありません。ログインをしてください</Typography>

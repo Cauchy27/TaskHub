@@ -9,7 +9,7 @@ const CircularProgressWithLabel=(
   props: CircularProgressProps & { value: number },
 ) => {
   return (
-    <Box sx={{ position: 'relative', display: 'inline-flex',height:"100%"}}>
+    <Box sx={{ position: 'relative', display: 'inline-flex',height:"60%",mt:"10%"}}>
       <CircularProgress variant="determinate" {...props} size={80} sx={{mt:"auto",mb:"auto"}}/>
       <Box
         sx={{
@@ -27,7 +27,7 @@ const CircularProgressWithLabel=(
           variant="caption"
           component="div"
           color="text.secondary"
-        >{`${Math.round(props.value)}/100`}</Typography>
+        >{`${Math.round(props.value)}%`}</Typography>
       </Box>
     </Box>
   );

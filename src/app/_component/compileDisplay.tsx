@@ -35,6 +35,9 @@ const initialTasksByDay:TasksByDay[]=[
         task_priority: 0,
         task_tag_id: "",
         task_user_id: "",
+        task_due_edit:"", 
+        task_estimate_time:10, 
+        task_time:0,
       }
     ]
   }
@@ -76,7 +79,7 @@ const CompileDisplay = (props:CompileDisplayProps)=>{
   },[props.compileTasks]);
 
   return(
-    <div style={{height:"100%",overflow:"scroll",width:"100%"}}>
+    <div className="contents_box" style={{height:"100%",overflow:"scroll",width:"100%"}}>
       {
         tasksByDay.map((tasks,Key1)=>(
           <>

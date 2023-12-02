@@ -23,7 +23,7 @@ const SearchBox = (props:SearchBoxProps) =>{
   
 
   return(
-    <div style={{height:"100%",overflow:"scroll",width:"100%"}}>
+    <div className="contents_box" style={{height:"100%",overflow:"scroll",width:"100%"}}>
       <Typography>条件</Typography>
       <Grid container spacing={1} 
         sx={{
