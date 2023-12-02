@@ -38,6 +38,7 @@ const initialTasksByDay:TasksByDay[]=[
         task_due_edit:"", 
         task_estimate_time:10, 
         task_time:0,
+        task_timer_start:"",
       }
     ]
   }

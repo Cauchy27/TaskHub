@@ -18,6 +18,7 @@ import CircularProgressWithLabel from './circleProggressWithLabel';
 import CreateIcon from '@mui/icons-material/Create';
 import AddTaskIcon from '@mui/icons-material/AddTask';
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
+import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
 
 const bull = (
   <Box
@@ -51,7 +52,7 @@ const TaskCard = (props:topicProps) => {
   const [taskDueEdit, setTaskDueEdit]=useState<string|Date|any>(props.topic.task_due_edit);
   const [taskEstimateTime, setTaskEstimateTime]=useState<number>(props.topic.task_estimate_time);
   const [taskTime, setTaskTime]=useState<number>(props.topic.task_time);
-
+  const [taskTimerStart, setTaskTimerStart]=useState<string|null>(props.topic.task_timer_start);
 
   const [taskTags, setTaskTags]=useState<TaskTagProps[]>([props.subtopic])
   const [cardEdit,setCardEdit]=useState<boolean>(false);
@@ -72,12 +73,31 @@ const TaskCard = (props:topicProps) => {
     setTaskDueEdit(props.topic.task_due_edit);
     setTaskEstimateTime(props.topic.task_estimate_time);
     setTaskTime(props.topic.task_time);
+    setTaskTimerStart(props.topic.task_timer_start);
     console.log("update_card");
 
-    if(props.topic.task_name ==""){
+    if(props.topic.task_name =="" && !props.topic.task_timer_start){
       setCardEdit(true);
     }
   },[props.topic]);
+
+  const timeCount = async() => {
+    console.log("test",taskTimerStart);
+    if(!taskTimerStart){
+      setTaskTimerStart(String(Math.floor(Number(new Date().getTime())/1000)));
+      setTimeout(()=>{
+        // changeEdit();
+        console.log("timer start");
+        console.log(taskTimerStart);
+      },1000)
+    }
+    else{
+      console.log(String(Math.round((Math.floor(Number(new Date().getTime())/1000) - Number(taskTimerStart))/60/60*100)/100)+"時間")
+      setTaskTimerStart(null);
+      setTaskTime(taskTime + Math.round((Math.floor(Number(new Date().getTime())/1000) - Number(taskTimerStart))/60/60*100)/100);
+      // changeEdit();
+    }
+  }
 
   const changeEdit = () => {
     if(cardEdit){
@@ -99,6 +119,7 @@ const TaskCard = (props:topicProps) => {
         task_due_edit:taskDueEdit, 
         task_estimate_time:taskEstimateTime, 
         task_time:taskTime,
+        task_timer_start:taskTimerStart,
       }
       console.log(updateTaskData);
       console.log(props.updateCard(updateTaskData));
@@ -127,6 +148,7 @@ const TaskCard = (props:topicProps) => {
         task_due_edit:taskDueEdit, 
         task_estimate_time:taskEstimateTime, 
         task_time:taskTime,
+        task_timer_start:null,
     }
     console.log(updateTaskData);
     console.log(props.updateCard(updateTaskData));
@@ -149,14 +171,19 @@ const TaskCard = (props:topicProps) => {
                 }}
             >
               <Grid xs={5}>
-                <Typography sx={{ fontSize: 12 }} align='left' color="text.secondary" gutterBottom>
+                <Typography sx={{ fontSize: 14 }} align='left' color="text.secondary" gutterBottom>
                   {taskTagId?taskTagId:"[タグ登録なし]"} {bull} 優先度：{taskPriority}
                 </Typography>
               </Grid>
-              <Grid xs={5}>
-                <Typography color="text.secondary" sx={{ fontSize: 12 }} align='left'>
+              <Grid xs={4}>
+                <Typography color="text.secondary" sx={{ fontSize: 14 }} align='left'>
                   {/* Start：{taskFrom}<br/> */}
                   期日：{taskDue}
+                </Typography>
+              </Grid>
+              <Grid xs={3}>
+                <Typography color="text.secondary" sx={{fontSize: 14}} align='left'>
+                  見積：{taskEstimateTime?taskEstimateTime+" h":"[未]"} 
                 </Typography>
               </Grid>
               {/* <Grid xs={4.5}>
@@ -184,37 +211,31 @@ const TaskCard = (props:topicProps) => {
                   {taskDetail}
                 </Typography>
               </Grid>
-              <Grid xs={2} sx={{ml:"1%",mr:"1%"}}>
-                <Typography color="text.secondary" sx={{fontSize: 12}}>
-                  見積：{taskEstimateTime?taskEstimateTime+"h":"[未]"} 
+              <Grid xs={2.2} sx={{ml:"2%",mr:"0%"}}>
+                <Typography color="text.secondary" sx={{fontSize: 13,mt:"3%"}}>
+                  経過：{taskTime?taskTime+" h":"[未]"} 
                 </Typography>
-                <Typography color="text.secondary" sx={{fontSize: 12,mt:"3%"}}>
-                  経過：{taskEstimateTime?taskTime+"h":"[未]"} 
-                </Typography>
+                <Button variant="outlined" sx={{ m: 1, width: '10ch'}} size="small" onClick={()=>{timeCount()}} endIcon={<AccessAlarmIcon/>}>
+                  {taskTimerStart?"停止":"開始"}
+                </Button>
                 {
-                  taskPoint>0 &&
+                  (taskPoint>0 || !taskTimerStart) &&
                   <CircularProgressWithLabel value={taskPoint}/>
                 }
-                {
-                  (taskPoint == 0 || !taskPoint) &&
-                  <Typography color="text.secondary" sx={{fontSize: 12,mt:"10%"}}>
-                    
-                  </Typography>
-                }
               </Grid>
-              <Grid xs={2.5} sx={{ml:"1%",mr:"1%"}}>
+              <Grid xs={2.3} sx={{ml:"1%",mr:"1%"}}>
                 <CardActions>
-                  <Button variant="outlined" disabled={props.deleteNG} size="small" endIcon={<DeleteSweepIcon />} onClick={()=>{
+                  <Button variant="outlined" disabled={taskTimerStart?true:props.deleteNG} size="small" endIcon={<DeleteSweepIcon />} onClick={()=>{
                     props.deleteTask(props.topic.task_id).then(()=>{
                       props.reloadTasks();
                     });
                   }}>削除</Button>
                 </CardActions>
                 <CardActions>
-                  <Button variant="outlined" size="small" onClick={()=>{changeEdit()}} endIcon={<CreateIcon />}>{cardEdit?"保存":"編集"}</Button>
+                  <Button variant="outlined" size="small" disabled={taskTimerStart?true:false} onClick={()=>{changeEdit()}} endIcon={<CreateIcon />}>{cardEdit?"保存":"編集"}</Button>
                 </CardActions>
                 <CardActions>
-                  <Button variant="outlined" size="small" endIcon={<AddTaskIcon />} onClick={()=>{taskComplete()}}>完了</Button>
+                  <Button variant="outlined" size="small" disabled={taskTimerStart?true:false} endIcon={<AddTaskIcon />} onClick={()=>{taskComplete()}}>完了</Button>
                 </CardActions>
               </Grid>
             </Grid>
@@ -354,7 +375,7 @@ const TaskCard = (props:topicProps) => {
                 </MenuItem>
               ))}
             </TextField>
-            <TextField
+            {/* <TextField
               type="date"
               defaultValue = {taskEnd}
               margin="dense"
@@ -369,7 +390,7 @@ const TaskCard = (props:topicProps) => {
                 }
               }
               sx={{ m: 1, width: '25ch' }}
-            />
+            /> */}
             <Button variant="outlined" sx={{ m: 1, width: '25ch' }} size="small" onClick={()=>{changeEdit()}} endIcon={<CreateIcon />}>{cardEdit?"保存":"編集"}</Button>
           </>
         }

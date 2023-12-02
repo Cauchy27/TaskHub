@@ -68,7 +68,7 @@ export default function Right(props:any) {
   const getAllTasks = async()=>{
     let { data, error, status } = await Supabase
       .from('task')
-      .select(`task_id, task_name, task_detail, task_point, task_from, task_due, task_end, task_priority, task_tag_id, task_user_id, task_due_edit, task_estimate_time, task_time`)
+      .select(`task_id, task_name, task_detail, task_point, task_from, task_due, task_end, task_priority, task_tag_id, task_user_id, task_due_edit, task_estimate_time, task_time, task_timer_start`)
       .eq('task_user_id', userData.id)
       .order('task_due', { ascending: true })
       .order('task_priority', { ascending: true });
@@ -82,7 +82,7 @@ export default function Right(props:any) {
   const getEndTasks = async()=>{
     let { data, error, status } = await Supabase
       .from('task')
-      .select(`task_id, task_name, task_detail, task_point, task_from, task_due, task_end, task_priority, task_tag_id, task_user_id, task_due_edit, task_estimate_time, task_time`)
+      .select(`task_id, task_name, task_detail, task_point, task_from, task_due, task_end, task_priority, task_tag_id, task_user_id, task_due_edit, task_estimate_time, task_time, task_timer_start`)
       .eq('task_user_id', userData.id)
       .gt("task_point",99)
       .order('task_due', { ascending: true })
@@ -97,7 +97,7 @@ export default function Right(props:any) {
   const getTasks1 = async()=>{
     let { data, error, status } = await Supabase
       .from('task')
-      .select(`task_id, task_name, task_detail, task_point, task_from, task_due, task_end, task_priority, task_tag_id, task_user_id, task_due_edit, task_estimate_time, task_time`)
+      .select(`task_id, task_name, task_detail, task_point, task_from, task_due, task_end, task_priority, task_tag_id, task_user_id, task_due_edit, task_estimate_time, task_time, task_timer_start`)
       .eq('task_user_id', userData.id)
       .lt("task_point",100)
       .order('task_due', { ascending: true })
@@ -112,7 +112,7 @@ export default function Right(props:any) {
   const getTasks2 = async()=>{
     let { data, error, status } = await Supabase
       .from('task')
-      .select(`task_id, task_name, task_detail, task_point, task_from, task_due, task_end, task_priority, task_tag_id, task_user_id, task_due_edit, task_estimate_time, task_time`)
+      .select(`task_id, task_name, task_detail, task_point, task_from, task_due, task_end, task_priority, task_tag_id, task_user_id, task_due_edit, task_estimate_time, task_time, task_timer_start`)
       .eq('task_user_id', userData.id)
       .lt("task_point",100)
       .order('task_priority', { ascending: true })
@@ -151,6 +151,8 @@ export default function Right(props:any) {
         task_due_edit:null, 
         task_estimate_time:10, 
         task_time:0,
+        task_timer_start:null,
+        task_timer_end:null,
       });
   }
   const updateTask = async(input:TaskCardProps) => {
@@ -170,6 +172,7 @@ export default function Right(props:any) {
         task_due_edit:input.task_due_edit, 
         task_estimate_time:input.task_estimate_time, 
         task_time:input.task_time,
+        task_timer_start:input.task_timer_start,
       })
       .eq('task_id', input.task_id);
     console.log(error);
@@ -193,7 +196,7 @@ export default function Right(props:any) {
   const getAllCompileTasks = async(from:string,to:string)=>{
     let { data, error, status } = await Supabase
       .from('task')
-      .select(`task_name,task_point, task_from, task_due, task_end, task_priority, task_tag_id, task_user_id, task_due_edit, task_estimate_time, task_time`)
+      .select(`task_name,task_point, task_from, task_due, task_end, task_priority, task_tag_id, task_user_id, task_due_edit, task_estimate_time, task_time, task_timer_start, task_timer_end`)
       .eq('task_user_id', userData.id)
       .gte("task_from",from)
       .lte("task_due",to)
