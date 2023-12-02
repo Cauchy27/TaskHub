@@ -106,7 +106,7 @@ const TaskCard = (props:topicProps) => {
   }
 
   const changeEdit = () => {
-    if(cardEdit){
+    if(cardEdit || taskTimerStart){
       setCardEdit(false);
       console.log("ここで保存を投げる");
       const from:Date = new Date(taskFrom);
