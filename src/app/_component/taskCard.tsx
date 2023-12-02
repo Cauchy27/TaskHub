@@ -188,7 +188,7 @@ const TaskCard = (props:topicProps) => {
   }
 
   return(
-    <div style={{backgroundColor:taskPoint>=100?"#fefde2":"",height:"100%"}}>
+    <div style={{height:"100%"}}>
       <CardContent>
         {
           !cardEdit &&
@@ -220,7 +220,7 @@ const TaskCard = (props:topicProps) => {
                 </Typography>
               </Grid>
             </Grid>
-            <Typography variant="h5" component="div" align='left' sx={{overflowWrap:"break-word"}}>
+            <Typography variant="h5" component="div" align='left' sx={{overflowWrap:"break-word",backgroundColor:taskPoint>=100?"#fefde2":""}}>
               {taskName}
             </Typography>
             <Grid container spacing={2} 

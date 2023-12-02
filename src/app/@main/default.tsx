@@ -152,7 +152,6 @@ export default function Right(props:any) {
         task_estimate_time:10, 
         task_time:0,
         task_timer_start:null,
-        task_timer_end:null,
       });
   }
   const updateTask = async(input:TaskCardProps) => {
