@@ -51,7 +51,7 @@ const TaskCard = (props:topicProps) => {
   const [taskUserId, setTaskUserId]=useState<string>(props.topic.task_user_id);
   const [taskDueEdit, setTaskDueEdit]=useState<string|Date|any>(props.topic.task_due_edit);
   const [taskEstimateTime, setTaskEstimateTime]=useState<number>(props.topic.task_estimate_time);
-  const [taskTime, setTaskTime]=useState<number>(props.topic.task_time);
+  const [taskTime, setTaskTime]=useState<number>(props.topic.task_time?props.topic.task_time:0);
   const [taskTimerStart, setTaskTimerStart]=useState<string|null>(props.topic.task_timer_start);
 
   const [taskTags, setTaskTags]=useState<TaskTagProps[]>([props.subtopic])
@@ -72,7 +72,7 @@ const TaskCard = (props:topicProps) => {
     setTaskUserId(props.topic.task_user_id);
     setTaskDueEdit(props.topic.task_due_edit);
     setTaskEstimateTime(props.topic.task_estimate_time);
-    setTaskTime(props.topic.task_time);
+    setTaskTime(props.topic.task_time?props.topic.task_time:0);
     setTaskTimerStart(props.topic.task_timer_start);
     console.log("update_card");
 
