@@ -78,35 +78,62 @@ const TaskCard = (props:topicProps) => {
 
     if(props.topic.task_name ==""){
       if(props.topic.task_timer_start !=""){
+        console.log("edit_stert",props.topic.task_timer_start);
         setCardEdit(true);
       }
     }
   },[props.topic]);
 
-  const timeCount = async() => {
+  const timerPush= async() => {
     console.log("test",taskTimerStart);
     if(!taskTimerStart){
       setTaskTimerStart(String(Math.floor(Number(new Date().getTime())/1000)));
-      setTimeout(()=>{
-        changeEdit();
-        console.log("timer start");
-        console.log(taskTimerStart);
-      },1000)
     }
     else{
       console.log(String(Math.round((Math.floor(Number(new Date().getTime())/1000) - Number(taskTimerStart))/60/60*100)/100)+"時間")
       setTaskTimerStart(null);
       setTaskTime(taskTime + Math.round((Math.floor(Number(new Date().getTime())/1000) - Number(taskTimerStart))/60/60*100)/100);
-      setTimeout(()=>{
-        changeEdit();
-        console.log("timer end");
-        console.log(taskTimerStart);
-      },1000)
     }
+    return "end";
+  }
+  useEffect(()=>{
+    if(taskTimerStart){
+      changeTimerEdit();
+      console.log("timer start");
+      console.log(taskTimerStart);
+    }
+    else{
+      changeTimerEdit();
+      console.log("timer end");
+      console.log(taskTimerStart);
+    }
+  },[taskTimerStart]);
+
+  const changeTimerEdit = async() => {
+    const from:Date = new Date(taskFrom);
+    const due:Date = new Date(taskDue);
+    const updateTaskData:TaskCardProps = {
+      task_id:taskId,
+      task_name:taskName,
+      task_detail:taskDetail,
+      task_point:taskPoint,
+      task_from:from,
+      task_due:due,
+      task_priority:taskPriority,
+      task_tag_id:taskTagId,
+      task_end:taskEnd,
+      task_user_id:taskUserId,
+      task_due_edit:taskDueEdit, 
+      task_estimate_time:taskEstimateTime, 
+      task_time:taskTime,
+      task_timer_start:taskTimerStart,
+    }
+    console.log(updateTaskData);
+    console.log(props.updateCard(updateTaskData));
   }
 
   const changeEdit = () => {
-    if(cardEdit || taskTimerStart){
+    if(cardEdit){
       setCardEdit(false);
       console.log("ここで保存を投げる");
       const from:Date = new Date(taskFrom);
@@ -192,11 +219,6 @@ const TaskCard = (props:topicProps) => {
                   見積：{taskEstimateTime?taskEstimateTime+" h":"[未]"} 
                 </Typography>
               </Grid>
-              {/* <Grid xs={4.5}>
-                <Typography color="text.secondary" sx={{fontSize: 12}} align='left'>
-                経過 / 見積：{taskEstimateTime?taskTime+"h / "+taskEstimateTime+"h":"[未設定]"} 
-                </Typography>
-              </Grid> */}
             </Grid>
             <Typography variant="h5" component="div" align='left' sx={{overflowWrap:"break-word"}}>
               {taskName}
@@ -221,7 +243,7 @@ const TaskCard = (props:topicProps) => {
                 <Typography color="text.secondary" sx={{fontSize: 13,mt:"3%"}}>
                   経過：{taskTime?taskTime+" h":"[未]"} 
                 </Typography>
-                <Button variant="outlined" sx={{ m: 1, width: '10ch'}} size="small" onClick={()=>{timeCount()}} endIcon={<AccessAlarmIcon/>}>
+                <Button variant="outlined" sx={{ m: 1, width: '10ch'}} size="small" onClick={()=>{timerPush()}} endIcon={<AccessAlarmIcon/>}>
                   {taskTimerStart?"停止":"開始"}
                 </Button>
                 {
