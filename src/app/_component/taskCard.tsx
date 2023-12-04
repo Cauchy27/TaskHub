@@ -46,7 +46,7 @@ const TaskCard = (props:topicProps) => {
   const [taskDue,setTaskDue]=useState<string|Date|any>(props.topic.task_due);
   const [taskPriority,setTaskPriority]=useState<number>(props.topic.task_priority);
   const [taskTagId,setTaskTagId]=useState<string>(props.topic.task_tag_id);
-  const [taskEnd,setTaskEnd]=useState<Date|string>(props.topic.task_end);
+  const [taskEnd,setTaskEnd]=useState<Date|string|null>(props.topic.task_end);
   const [taskId, setTaskId]=useState<number>(props.topic.task_id);
   const [taskUserId, setTaskUserId]=useState<string>(props.topic.task_user_id);
   const [taskDueEdit, setTaskDueEdit]=useState<string|Date|any>(props.topic.task_due_edit);
@@ -67,7 +67,7 @@ const TaskCard = (props:topicProps) => {
     setTaskDue(props.topic.task_due);
     setTaskPriority(props.topic.task_priority);
     setTaskTagId(props.topic.task_tag_id);
-    setTaskEnd(props.topic.task_end);
+    setTaskEnd(props.topic.task_end?props.topic.task_end:null);
     setTaskId(props.topic.task_id);
     setTaskUserId(props.topic.task_user_id);
     setTaskDueEdit(props.topic.task_due_edit);
@@ -302,7 +302,7 @@ const TaskCard = (props:topicProps) => {
                     setTaskEnd(today);
                   }
                   else{
-                    setTaskEnd("");
+                    setTaskEnd(null);
                   }
                 }
               }
